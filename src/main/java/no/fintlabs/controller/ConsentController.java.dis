@@ -1,0 +1,28 @@
+//package no.fintlabs.controller;
+//
+//import lombok.extern.slf4j.Slf4j;
+//import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
+//import no.fintlabs.service.ConcentService;
+//import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.security.core.annotation.AuthenticationPrincipal;
+//import org.springframework.security.oauth2.jwt.Jwt;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RestController;
+//
+//import java.util.List;
+//
+//@Slf4j
+//@RestController
+//@RequestMapping("/api")
+//public class ConsentController {
+//
+//    @GetMapping
+//    public ResponseEntity<List<SamtykkeResource>> getConsents(@AuthenticationPrincipal Jwt jwt) {
+//        FintJwtEndUserPrincipal principal = FintJwtEndUserPrincipal.from(jwt);
+//        return ConcentService.
+//
+//
+//    }
+//}
