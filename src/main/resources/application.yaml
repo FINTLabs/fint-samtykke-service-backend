@@ -37,4 +37,4 @@ concent-config:
       processingUri: personvern/samtykke/behandling/
       processingbaseUri: personvern/kodeverk/behandlingsgrunnlag/systemid/
       personaldataUri: personvern/kodeverk/personopplysning/systemid/
-      healthcheck: personvern/samtykke/tjeneste/
+
