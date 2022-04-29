@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -26,8 +27,9 @@ public class PersonController {
 
     @GetMapping
     public PersonResource getPerson(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        //FintJwtEndUserPrincipal principal = FintJwtEndUserPrincipal.from(jwt);
-        PersonResource person = personService.getPerson(new FintJwtEndUserPrincipal());
+
+        FintJwtEndUserPrincipal principal = FintJwtEndUserPrincipal.from(jwt);
+        PersonResource person = personService.getPerson(principal);
         return person;
 
 

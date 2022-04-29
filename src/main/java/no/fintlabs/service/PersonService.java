@@ -15,17 +15,15 @@ public class PersonService {
     private final FintClient fintClient;
     private final FintEndpointConfiguration fintEndpointConfiguration;
 
-
     public PersonService(FintClient fintClient, FintEndpointConfiguration fintEndpointConfiguration) {
         this.fintClient = fintClient;
         this.fintEndpointConfiguration = fintEndpointConfiguration;
     }
 
-
     public PersonResource getPerson(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         PersonResource person = fintClient
-                .getResource(fintEndpointConfiguration.getEmployeeUri()+"509545", PersonResource.class)
-                .toFuture().get();
+            .getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class)
+            .toFuture().get();
 
         return person;
     }
