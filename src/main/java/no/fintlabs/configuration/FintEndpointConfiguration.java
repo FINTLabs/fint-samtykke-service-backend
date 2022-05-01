@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@EnableConfigurationProperties
-@ConfigurationProperties(prefix = "concent-config.endpoints.fint-uri")
+//@EnableConfigurationProperties
+@ConfigurationProperties(prefix = "fint.concent.endpoints")
 public class FintEndpointConfiguration {
 
         private String baseUri;

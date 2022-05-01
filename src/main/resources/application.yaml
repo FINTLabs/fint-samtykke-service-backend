@@ -6,6 +6,31 @@ fint:
     base-url: https://beta.felleskomponent.no
     registration-id: fint
 
+  concent:
+    endpoints:
+      baseUri: https://beta.felleskomponent.no/
+      employeeUri: administrasjon/personal/personalressurs/ansattnummer/
+      employeessnUri: administrasjon/personal/person/fodselsnummer/
+      studentUri: utdanning/elev/elev/elevnummer/
+      studentssnUri: utdanning/elev/person/fodselsnummer/
+      consentUri: personvern/samtykke/samtykke/
+      processorUri: personvern/samtykke/tjeneste/systemid/
+      processingUri: personvern/samtykke/behandling/
+      processingbaseUri: personvern/kodeverk/behandlingsgrunnlag/systemid/
+      personaldataUri: personvern/kodeverk/personopplysning/systemid/
+
+  branding:
+    logo: "company-logo.png"
+    primaryColor: "#7a1668"
+    primaryColorLight: "#513f35"
+    secondaryColor: "#513f35"
+    featureColor1: "#0b8797"
+    featureColor2: "#d0eaed"
+    phoneNumber: "11223344"
+    mail: "post@vigoiks.no"
+    countyName: "Vigo IKS"
+
+
 spring:
   security:
     oauth2:
@@ -24,17 +49,5 @@ spring:
             provider: fint-idp
             scope: fint-client
 
-concent-config:
-  endpoints:
-    fint-uri:
-      baseUri: https://beta.felleskomponent.no/
-      employeeUri: administrasjon/personal/personalressurs/ansattnummer/
-      employeessnUri: administrasjon/personal/person/fodselsnummer/
-      studentUri: utdanning/elev/elev/elevnummer/
-      studentssnUri: utdanning/elev/person/fodselsnummer/
-      consentUri: personvern/samtykke/samtykke/
-      processorUri: personvern/samtykke/tjeneste/systemid/
-      processingUri: personvern/samtykke/behandling/
-      processingbaseUri: personvern/kodeverk/behandlingsgrunnlag/systemid/
-      personaldataUri: personvern/kodeverk/personopplysning/systemid/
+
 
