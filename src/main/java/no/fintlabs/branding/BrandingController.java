@@ -6,20 +6,20 @@ import no.fintlabs.service.BrandingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/branding")
 public class BrandingController {
     private final BrandingService brandingService;
+    private final FrontEndBrandingConfiguration frontEndBrandingConfiguration;
 
-    public BrandingController(BrandingService brandingService) { this.brandingService = brandingService; }
+    public BrandingController(BrandingService brandingService, FrontEndBrandingConfiguration frontEndBrandingConfiguration) { this.brandingService = brandingService;
+        this.frontEndBrandingConfiguration = frontEndBrandingConfiguration;
+    }
 
     @GetMapping
     public FrontEndBrandingConfiguration getBranding(){
-        FrontEndBrandingConfiguration frontEndBrandingConfiguration = brandingService.getBranding();
-        //System.out.println("Controller: " + frontEndBrandingConfiguration.getLogo());
 
         return frontEndBrandingConfiguration;
     }

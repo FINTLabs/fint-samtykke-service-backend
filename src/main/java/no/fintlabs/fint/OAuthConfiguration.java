@@ -24,8 +24,7 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Setter
-@Configuration
-//@RequiredArgsConstructor
+//@Configuration
 @ConfigurationProperties(prefix = "fint.client")
 public class OAuthConfiguration {
 
