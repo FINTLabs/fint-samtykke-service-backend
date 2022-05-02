@@ -1,33 +1,24 @@
-package no.fintlabs.controller;
+package no.fintlabs.branding;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fintlabs.configuration.FrontEndBrandingConfiguration;
-import no.fintlabs.service.BrandingService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/branding")
 public class BrandingController {
-    private final BrandingService brandingService;
     private final FrontEndBrandingConfiguration frontEndBrandingConfiguration;
 
-    public BrandingController(BrandingService brandingService, FrontEndBrandingConfiguration frontEndBrandingConfiguration) { this.brandingService = brandingService;
+    public BrandingController(FrontEndBrandingConfiguration frontEndBrandingConfiguration) {
         this.frontEndBrandingConfiguration = frontEndBrandingConfiguration;
     }
 
     @GetMapping
-    public FrontEndBrandingConfiguration getBranding(){
-
-        return frontEndBrandingConfiguration;
+    public ResponseEntity<Mono<FrontEndBrandingConfiguration>> getBranding() {
+        return ResponseEntity.ok(Mono.just(frontEndBrandingConfiguration));
     }
-//    @GetMapping
-//    public Mono<FrontEndBrandingConfiguration> getBranding(){
-//        FrontEndBrandingConfiguration frontEndBrandingConfiguration = brandingService.getBranding();
-//        return Mono.just(frontEndBrandingConfiguration);
-//    }
-
-
 }

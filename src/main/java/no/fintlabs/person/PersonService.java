@@ -1,8 +1,8 @@
-package no.fintlabs.service;
+package no.fintlabs.person;
 
 import no.fint.model.resource.felles.PersonResource;
-import no.fintlabs.client.FintClient;
-import no.fintlabs.configuration.FintEndpointConfiguration;
+import no.fintlabs.fint.FintClient;
+import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +21,12 @@ public class PersonService {
     }
 
     public PersonResource getPerson(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        PersonResource person = fintClient
-            .getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class)
-            .toFuture().get();
 
-        return person;
+        return fintClient
+                .getResource(
+                        fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(),
+                        PersonResource.class)
+                .toFuture()
+                .get();
     }
 }
