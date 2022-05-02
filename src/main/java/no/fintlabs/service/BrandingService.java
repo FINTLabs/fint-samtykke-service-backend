@@ -12,8 +12,8 @@ public class BrandingService {
     }
 
 
-    public FrontEndBrandingConfiguration geBranding() {
-        System.out.println("Service: " + frontEndBrandingConfiguration.getLogo());
+    public FrontEndBrandingConfiguration getBranding() {
+        //System.out.println("Service: " + frontEndBrandingConfiguration.getLogo());
         return frontEndBrandingConfiguration;
     }
 }

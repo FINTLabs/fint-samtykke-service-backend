@@ -20,15 +20,15 @@ fint:
       personaldataUri: personvern/kodeverk/personopplysning/systemid/
 
   branding:
-    logo: "company-logo.png"
-    primaryColor: "#7a1668"
-    primaryColorLight: "#513f35"
-    secondaryColor: "#513f35"
-    featureColor1: "#0b8797"
-    featureColor2: "#d0eaed"
-    phoneNumber: "11223344"
-    mail: "post@vigoiks.no"
-    countyName: "Vigo IKS"
+    logo: company-logo.png
+    primaryColor: 7a1668
+    primaryColorLight: 513f35
+    secondaryColor: 513f35
+    featureColor1: 0b8797
+    featureColor2: d0eaed
+    phoneNumber: 11223344
+    mail: postatvigoiks.no
+    countyName: Vigo IKS
 
 
 spring:
@@ -48,6 +48,8 @@ spring:
             client-secret:
             provider: fint-idp
             scope: fint-client
-
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
 
 

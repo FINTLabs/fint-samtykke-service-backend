@@ -6,6 +6,7 @@ import no.fintlabs.service.BrandingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
@@ -17,10 +18,16 @@ public class BrandingController {
 
     @GetMapping
     public FrontEndBrandingConfiguration getBranding(){
-        FrontEndBrandingConfiguration frontEndBrandingConfiguration = brandingService.geBranding();
-        System.out.println("Controller: " + frontEndBrandingConfiguration.getLogo());
+        FrontEndBrandingConfiguration frontEndBrandingConfiguration = brandingService.getBranding();
+        //System.out.println("Controller: " + frontEndBrandingConfiguration.getLogo());
 
         return frontEndBrandingConfiguration;
     }
+//    @GetMapping
+//    public Mono<FrontEndBrandingConfiguration> getBranding(){
+//        FrontEndBrandingConfiguration frontEndBrandingConfiguration = brandingService.getBranding();
+//        return Mono.just(frontEndBrandingConfiguration);
+//    }
+
 
 }
