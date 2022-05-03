@@ -1,4 +1,4 @@
-package no.fintlabs;
+package no.fintlabs.fint;
 
 import io.netty.channel.ChannelOption;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.security.oauth2.client.*;
@@ -24,8 +23,6 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Setter
-@Configuration
-//@RequiredArgsConstructor
 @ConfigurationProperties(prefix = "fint.client")
 public class OAuthConfiguration {
 
@@ -33,12 +30,6 @@ public class OAuthConfiguration {
     private String username;
     private String password;
     private String registrationId;
-
-    //private final AdapterProperties props;
-
-//    public OAuthConfiguration(AdapterProperties props) {
-//        this.props = props;
-//    }
 
     @Bean
     public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(

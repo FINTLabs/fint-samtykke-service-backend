@@ -3,7 +3,7 @@
 //import no.fint.model.resource.felles.PersonResource;
 //import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
 //import no.fint.model.resource.utdanning.elev.ElevResource;
-//import no.fintlabs.client.FintClient;
+//import no.fintlabs.fint.FintClient;
 //import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 //import org.springframework.stereotype.Component;
 //

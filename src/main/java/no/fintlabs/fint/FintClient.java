@@ -1,8 +1,6 @@
-package no.fintlabs.client;
+package no.fintlabs.fint;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
