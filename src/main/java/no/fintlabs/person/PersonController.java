@@ -16,11 +16,11 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 @RestController
 @RequestMapping("/api/person")
-public class PersonResourceController {
+public class PersonController {
 
     private final PersonService personService;
 
-    public PersonResourceController(PersonService personService) {
+    public PersonController(PersonService personService) {
         this.personService = personService;
     }
 

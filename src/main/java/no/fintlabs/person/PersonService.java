@@ -39,6 +39,17 @@ public class PersonService {
         return person;
     }
 
+    public String getPersonUri(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
+        PersonResource personResource = fintClient.getResource(
+                fintEndpointConfiguration
+                .getEmployeeUri() + principal.getEmployeeId(), PersonResource.class)
+                .toFuture().get();
+        Map<String,List<Link>> personResourceLinks = personResource.getLinks();
+        List<Link> personLinks = personResourceLinks.get("person");
+        String personLink = personLinks.get(0).toString();
+        return personLink;
+    }
+
     public PersonResource getPersonResource(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         return fintClient
                 .getResource(
