@@ -1,6 +1,8 @@
 package no.fintlabs.consent;
 
+import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
+import no.fint.model.resource.personvern.samtykke.SamtykkeResources;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
@@ -10,7 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.concurrent.ExecutionException;
-
+@Slf4j
 @Component
 public class ConsentService {
 
@@ -24,12 +26,18 @@ public class ConsentService {
         this.personService = personService;
     }
 
-    public SamtykkeResource getConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
+    public Mono<SamtykkeResources> getConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         String oDataFilter = "links/person/any(a:a/href eq '" + personService.getPersonUri(principal) +"')";
+        log.info("Samtykke URI ::: " + fintEndpointConfiguration.getBaseUri() +
+                fintEndpointConfiguration.getConsentUri() + "?$filter=" + oDataFilter);
 
-        SamtykkeResource consents = fintClient.getResource(fintEndpointConfiguration.getBaseUri() +
-                fintEndpointConfiguration.getConsentUri() + "?$filter=" + oDataFilter, SamtykkeResource.class).toFuture().get();
-        return consents;
+        return fintClient.getResource(fintEndpointConfiguration.getBaseUri() +
+                fintEndpointConfiguration.getConsentUri() + "?$filter=" + oDataFilter, SamtykkeResources.class);
+
+
+//        Mono<SamtykkeResource> consents = fintClient.getResource(fintEndpointConfiguration.getBaseUri() +
+//                fintEndpointConfiguration.getConsentUri() + "?$filter=" + oDataFilter, SamtykkeResource.class);   //toFuture().get();
+//        return consents;
 
 
     }

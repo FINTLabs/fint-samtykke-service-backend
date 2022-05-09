@@ -2,6 +2,7 @@ package no.fintlabs.consent;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
+import no.fint.model.resource.personvern.samtykke.SamtykkeResources;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -24,7 +25,7 @@ public class ConsentController {
     }
 
     @GetMapping("/consents")
-    public SamtykkeResource getConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+    public Mono<SamtykkeResources> getConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return consentService.getConsents(FintJwtEndUserPrincipal.from(jwt));
 
 
