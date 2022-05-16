@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -20,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class ConsentController {
     private final ConsentService consentService;
 
-    public ConsentController(ConsentService concentService, ConsentService consentService) {
+    public ConsentController(ConsentService consentService) {
         this.consentService = consentService;
     }
 

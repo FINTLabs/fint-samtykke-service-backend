@@ -57,6 +57,8 @@ public class FintClient {
                 .bodyToMono(clazz);
     }
 
+
+
     @Data
     private static class LastUpdated {
         private Long lastUpdated;
