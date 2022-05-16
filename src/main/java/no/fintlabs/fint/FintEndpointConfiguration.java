@@ -18,6 +18,7 @@ public class FintEndpointConfiguration {
     private String studentUri;
     private String studentssnUri;
     private String consentUri;
+    private String processorsUri;
     private String processorUri;
     private String processingUri;
     private String processingbaseUri;

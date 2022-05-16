@@ -1,7 +1,5 @@
 package no.fintlabs.processing;
 
-
-import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fint.model.resource.personvern.samtykke.BehandlingResources;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
