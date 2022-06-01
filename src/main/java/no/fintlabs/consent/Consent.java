@@ -11,18 +11,25 @@ import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 public class Consent {
 
     private String SystemIdValue;
-    //Tjeneste i GUI
-    private String ProcessorName;
+
+    private String ProcessorName; //Tjeneste i GUI
     private Periode ExpirationDate;
     private boolean Active;
-    //Personopplysning i GUI
-    private String PersonalDataName;
-    // Formål i GUI (Prcessing.formal = text)
-    private BehandlingResource Processing;
+    private String PersonalDataName; //personopplysning i GUI
+    private BehandlingResource Processing; // Formål i GUI (Prcessing.formal = text)
     private BehandlingsgrunnlagResource ProcessingBase;
 
-    public Consent(String processorName, String personalDataName, BehandlingResource processing, BehandlingsgrunnlagResource processingBase) {
+    public Consent(String systemIdValue,
+                   String processorName,
+                   Periode expirationDate,
+                   boolean active,
+                   String personalDataName,
+                   BehandlingResource processing,
+                   BehandlingsgrunnlagResource processingBase) {
+        this.SystemIdValue = systemIdValue;
         this.ProcessorName = processorName;
+        this.ExpirationDate = expirationDate;
+        this.Active = active;
         this.PersonalDataName = personalDataName;
         this.Processing = processing;
         this.ProcessingBase = processingBase;
