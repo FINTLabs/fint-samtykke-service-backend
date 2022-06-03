@@ -2,6 +2,7 @@ package no.fintlabs.fint;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -57,6 +58,27 @@ public class FintClient {
                 .bodyToMono(clazz);
     }
 
+    public <K, T> Mono<K> postResource(String url, T request, Class<K> clazz){
+        return WebClient
+                .builder()
+                .build()
+                .post()
+                .uri(url)
+                .body(BodyInserters.fromValue(request))
+                .retrieve()
+                .bodyToMono(clazz);
+    }
+
+    public <K,T> Mono<K> putResource(String url, T request, Class<K> clazz){
+        return WebClient
+                .builder()
+                .build()
+                .put()
+                .uri(url)
+                .body(BodyInserters.fromValue(request))
+                .retrieve()
+                .bodyToMono(clazz);
+    }
 
 
     @Data
