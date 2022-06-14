@@ -20,11 +20,7 @@ public class ProcessingService {
     }
 
     public Mono<BehandlingResources> getProcessings(FintJwtEndUserPrincipal principal){
-        Mono<BehandlingResources> processing = fintclient.getResource(fintEndpointConfiguration.getBaseUri() +
+        return fintclient.getResource(fintEndpointConfiguration.getBaseUri() +
                 fintEndpointConfiguration.getProcessingUri(), BehandlingResources.class);
-
-
-        return processing;
-
     }
 }
