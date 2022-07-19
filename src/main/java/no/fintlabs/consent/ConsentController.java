@@ -1,7 +1,6 @@
 package no.fintlabs.consent;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.personvern.samtykke.SamtykkeResources;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,21 +22,22 @@ public class ConsentController {
         this.consentService = consentService;
     }
 
-//    @GetMapping("/consents")
-//    public Mono<SamtykkeResources> getConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-//        return consentService.getFilteredConsents(FintJwtEndUserPrincipal.from(jwt));
-//    }
-
     @GetMapping("/consents")
     public Mono<List<ApiConsent>> getApiConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return consentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
     }
 
-//    @PostMapping("/consents")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Mono<ApiConsent> addApiConsent(String processingId, @AuthenticationPrincipal Jwt jwt){
-//        return consentService.addApiConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
-//    }
+    @PostMapping("/consents")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<ApiConsent> addApiConsent(String processingId, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+        return consentService.addApiConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
+    }
+
+    @PutMapping("/")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Mono<ApiConsent> updateConsent(String consentId, String processingId, boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+        return consentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
+    }
 
 
 
