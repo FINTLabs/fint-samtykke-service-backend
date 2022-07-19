@@ -165,12 +165,31 @@ public class ConsentService {
                 .build();
     }
 
-    public Mono<ApiConsent> updateConsent(String consentId, String processingId, boolean active, FintJwtEndUserPrincipal from) throws ExecutionException, InterruptedException {
+    public Mono<ApiConsent> updateConsent(String consentId, String processingId, boolean active, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         SamtykkeResource samtykkeResource = fintClient.getResource(fintEndpointConfiguration.getBaseUri()
                 + fintEndpointConfiguration.getConsentUri() +"systemid/" + consentId, SamtykkeResource.class).toFuture().get();
+        if (samtykkeResource != null){
+            if (samtykkeResource.getGyldighetsperiode().getStart() != null
+                    && samtykkeResource.getGyldighetsperiode().getSlutt() == null
+                    && !active){
+                samtykkeResource.getGyldighetsperiode().setSlutt(Date.from(Clock.systemUTC().instant()));
+                Mono.just(fintClient.putResource(fintEndpointConfiguration.getBaseUri()
+                        +fintEndpointConfiguration.getConsentUri()
+                        + "systemid/" + consentId, samtykkeResource,SamtykkeResource.class ));
+                return Mono.just(createApiConsent(principal,samtykkeResource,false));
+            }
 
+            else if (samtykkeResource.getGyldighetsperiode().getSlutt() != null && active){
+                BehandlingResource behandlingResource = fintClient.getResource(fintEndpointConfiguration.getBaseUri()
+                        + fintEndpointConfiguration.getProcessingUri()
+                        + "systemid" + processingId, BehandlingResource.class).toFuture().get();
+                String behandlingsResourceId = behandlingResource.getSystemId().getIdentifikatorverdi();
+                return addApiConsent(behandlingsResourceId,principal);
 
-        return Mono.just(new ApiConsent());
+            }
+
+        }
+        return null;
     }
 
 //    public ApiConsent createApiConsent(
