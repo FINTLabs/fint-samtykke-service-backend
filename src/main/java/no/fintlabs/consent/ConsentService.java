@@ -12,9 +12,9 @@ import no.fintlabs.fint.FintEndpointConfiguration;
 import no.fintlabs.processing.ProcessingService;
 import no.fintlabs.processors.ProcessorService;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import no.fintlabs.person.PersonService;
-import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Mono;
 
 import java.time.Clock;
@@ -110,7 +110,7 @@ public class ConsentService {
         Link personLink = new Link(personService.getPersonUri(principal));
 
         Periode consentTime = new Periode();{
-            consentTime.setBeskrivelse("Opprettelse av samtykke..");
+            consentTime.setBeskrivelse("Opprettelse av samtykke");
             consentTime.setStart(Date.from(Clock.systemUTC().instant()));
         }
 
@@ -127,11 +127,13 @@ public class ConsentService {
             consent.addBehandling(processingLink);
         }
 
-        Mono <SamtykkeResource> newConsent = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
-                + fintEndpointConfiguration.getConsentUri(),consent,SamtykkeResource.class );
-
-
-        return Mono.just(createApiConsent(principal,newConsent.block(),true));
+        ResponseEntity response = fintClient.postRes(fintEndpointConfiguration.getBaseUri()
+                + fintEndpointConfiguration.getConsentUri(),consent,SamtykkeResource.class ).toFuture().get();
+        //TODO: test på velykket add før henting av location attrib
+        log.info("New consent created : " + response.getHeaders().getLocation().toString());
+        SamtykkeResource createdConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+        
+        return Mono.just(createApiConsent(principal,createdConsent,true));
 
     }
 
@@ -146,7 +148,7 @@ public class ConsentService {
         String consentProcessingLink   = String.valueOf(consentLinks.get("behandling").get(0));
         BehandlingResource processing = fintClient.getResource(consentProcessingLink,BehandlingResource.class).toFuture().get();
         Map<String,List<Link>> processingLinks = processing.getLinksIfPresent();
-        String processingBaseLink = String.valueOf(processingLinks.get("behandlingsgrunnlang").get(0));
+        String processingBaseLink = String.valueOf(processingLinks.get("behandlingsgrunnlag").get(0));
         String personalDataLink = String.valueOf(processingLinks.get("personopplysning").get(0));
         String processorLink = String.valueOf(processingLinks.get("tjeneste").get(0));
         TjenesteResource processor = fintClient.getResource(processorLink,TjenesteResource.class).toFuture().get();

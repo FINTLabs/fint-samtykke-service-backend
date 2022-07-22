@@ -27,9 +27,8 @@ public class ConsentController {
         return consentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
     }
 
-    @PostMapping("/consents")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Mono<ApiConsent> addApiConsent(String processingId, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+    @PostMapping("/{processingId}")
+    public Mono<ApiConsent> addApiConsent(@PathVariable String processingId, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return consentService.addApiConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
     }
 
