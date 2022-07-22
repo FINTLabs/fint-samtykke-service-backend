@@ -75,15 +75,12 @@ public class FintClient {
                 .retrieve()
                 .toBodilessEntity();
     }
-    public <K,T> Mono<K> putResource(String url, T request, Class<K> clazz){
-        return WebClient
-                .builder()
-                .build()
-                .put()
+    public <K,T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz){
+        return webClient.put()
                 .uri(url)
                 .body(BodyInserters.fromValue(request))
                 .retrieve()
-                .bodyToMono(clazz);
+                .toBodilessEntity();
     }
 
 //    public <T> Mono<T> getStatus(String url, Class<T> clazz){

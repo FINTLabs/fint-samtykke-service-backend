@@ -29,12 +29,12 @@ public class ConsentController {
 
     @PostMapping("/{processingId}")
     public Mono<ApiConsent> addApiConsent(@PathVariable String processingId, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        return consentService.addApiConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
+        return consentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
     }
 
     @PutMapping("/")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Mono<ApiConsent> updateConsent(String consentId, String processingId, boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+    public Mono<ApiConsent> updateApiConsent(String consentId, String processingId, boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return consentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
     }
 

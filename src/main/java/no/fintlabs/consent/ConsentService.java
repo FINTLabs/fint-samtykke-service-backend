@@ -104,7 +104,7 @@ public class ConsentService {
 
     }
 
-    public Mono<ApiConsent> addApiConsent(String processingId, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
+    public Mono<ApiConsent> addConsent(String processingId, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         Link processingLink = new Link( fintEndpointConfiguration.getBaseUri() + fintEndpointConfiguration.getProcessingUri()
         + "systemid/" + processingId );
         Link personLink = new Link(personService.getPersonUri(principal));
@@ -132,7 +132,7 @@ public class ConsentService {
         //TODO: test på velykket add før henting av location attrib
         log.info("New consent created : " + response.getHeaders().getLocation().toString());
         SamtykkeResource createdConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
-        
+
         return Mono.just(createApiConsent(principal,createdConsent,true));
 
     }
@@ -176,7 +176,7 @@ public class ConsentService {
                     && !active){
                 samtykkeResource.getGyldighetsperiode().setSlutt(Date.from(Clock.systemUTC().instant()));
                 Mono.just(fintClient.putResource(fintEndpointConfiguration.getBaseUri()
-                        +fintEndpointConfiguration.getConsentUri()
+                        + fintEndpointConfiguration.getConsentUri()
                         + "systemid/" + consentId, samtykkeResource,SamtykkeResource.class ));
                 return Mono.just(createApiConsent(principal,samtykkeResource,false));
             }
@@ -186,11 +186,12 @@ public class ConsentService {
                         + fintEndpointConfiguration.getProcessingUri()
                         + "systemid" + processingId, BehandlingResource.class).toFuture().get();
                 String behandlingsResourceId = behandlingResource.getSystemId().getIdentifikatorverdi();
-                return addApiConsent(behandlingsResourceId,principal);
+                return addConsent(behandlingsResourceId,principal);
 
             }
 
         }
+        log.info("No consents found for systemId : " + consentId);
         return null;
     }
 
