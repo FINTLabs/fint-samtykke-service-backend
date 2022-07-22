@@ -22,8 +22,6 @@ public class ProcessorService {
     public Mono<TjenesteResources> getProcessors(FintJwtEndUserPrincipal principal){
         Mono<TjenesteResources> processors = fintClient.getResource(fintEndpointConfiguration.getBaseUri()+
                 fintEndpointConfiguration.getProcessorsUri(),TjenesteResources.class);
-        log.info("Service :: " + fintEndpointConfiguration.getBaseUri()+
-                fintEndpointConfiguration.getProcessorsUri());
         return processors;
     }
 }

@@ -1,6 +1,5 @@
 package no.fintlabs.person;
 
-
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.felles.Person;
 import no.fint.model.resource.felles.PersonResource;

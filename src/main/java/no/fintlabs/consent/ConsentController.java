@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-//TODO: rearrange endpoints to match prod uri
+
 public class ConsentController {
     private final ConsentService consentService;
 
@@ -32,9 +32,9 @@ public class ConsentController {
         return consentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
     }
 
-    @PutMapping("/")
+    @PutMapping("/{consentId}/{processingId}/{active}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Mono<ApiConsent> updateApiConsent(String consentId, String processingId, boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+    public Mono<ApiConsent> updateApiConsent(@PathVariable String consentId, String processingId, boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return consentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
     }
 

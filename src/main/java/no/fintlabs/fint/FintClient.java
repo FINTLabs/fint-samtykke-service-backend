@@ -59,16 +59,8 @@ public class FintClient {
                 .bodyToMono(clazz);
     }
 
-    public <K, T> Mono<K> postResource(String url, T request, Class<K> clazz){
-        return webClient
-                .post()
-                .uri(url)
-                .body(BodyInserters.fromValue(request))
-                .retrieve()
-                .bodyToMono(clazz);
-    }
 
-    public <K,T> Mono<ResponseEntity<Void>> postRes(String url, T request,Class<K> clazz){
+    public <K,T> Mono<ResponseEntity<Void>> postResource(String url, T request,Class<K> clazz){
         return webClient.post()
                 .uri(url)
                 .body(BodyInserters.fromValue(request))
@@ -82,13 +74,6 @@ public class FintClient {
                 .retrieve()
                 .toBodilessEntity();
     }
-
-//    public <T> Mono<T> getStatus(String url, Class<T> clazz){
-//        return webClient
-//                .get()
-//                .uri(loc)
-//    }
-
 
     @Data
     private static class LastUpdated {

@@ -1,12 +1,10 @@
 package no.fintlabs.processing;
 
-import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fint.model.resource.personvern.samtykke.BehandlingResources;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
