@@ -65,7 +65,7 @@ public class ConsentService {
                     String processingBaseLink = String.valueOf(processingsLinks.get("behandlingsgrunnlag").get(0));
                     String personalDataLink = String.valueOf(processingsLinks.get("personopplysning").get(0));
                     String processorLink = String.valueOf(processingsLinks.get("tjeneste").get(0));
-                    TjenesteResource processor ;
+                    TjenesteResource processor;
                     try {
                         processor = fintClient.getResource(processorLink, TjenesteResource.class).toFuture().get();
                     } catch (InterruptedException | ExecutionException e) {
@@ -103,21 +103,24 @@ public class ConsentService {
     }
 
     public Mono<ApiConsent> addConsent(String processingId, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        Link processingLink = new Link( fintEndpointConfiguration.getBaseUri() + fintEndpointConfiguration.getProcessingUri()
-        + "systemid/" + processingId );
+        Link processingLink = new Link(fintEndpointConfiguration.getBaseUri() + fintEndpointConfiguration.getProcessingUri()
+                + "systemid/" + processingId);
         Link personLink = new Link(personService.getPersonUri(principal));
 
-        Periode consentTime = new Periode();{
+        Periode consentTime = new Periode();
+        {
             consentTime.setBeskrivelse("Opprettelse av samtykke");
             consentTime.setStart(Date.from(Clock.systemUTC().instant()));
         }
 
-        Identifikator consentSystemId = new Identifikator();{
+        Identifikator consentSystemId = new Identifikator();
+        {
             consentSystemId.setGyldighetsperiode(consentTime);
             consentSystemId.setIdentifikatorverdi("systemId");
         }
 
-        SamtykkeResource consent = new SamtykkeResource();{
+        SamtykkeResource consent = new SamtykkeResource();
+        {
             consent.setGyldighetsperiode(consentTime);
             consent.setOpprettet(consentTime.getStart());
             consent.setSystemId(consentSystemId);
@@ -126,12 +129,12 @@ public class ConsentService {
         }
 
         ResponseEntity response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
-                + fintEndpointConfiguration.getConsentUri(),consent,SamtykkeResource.class ).toFuture().get();
+                + fintEndpointConfiguration.getConsentUri(), consent, SamtykkeResource.class).toFuture().get();
 
         log.info("New consent created : " + response.getHeaders().getLocation().toString());
         SamtykkeResource createdConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
-        return Mono.just(createApiConsent(principal,createdConsent,true));
+        return Mono.just(createApiConsent(principal, createdConsent, true));
     }
 
     public ApiConsent createApiConsent(
@@ -140,16 +143,16 @@ public class ConsentService {
             boolean active) throws ExecutionException, InterruptedException {
         ApiConsent apiConsent = new ApiConsent();
         String systemIdValue = consent.getSystemId().getIdentifikatorverdi();
-        Map<String,List<Link>> consentLinks = consent.getLinksIfPresent();
-        String consentProcessingLink   = String.valueOf(consentLinks.get("behandling").get(0));
-        BehandlingResource processing = fintClient.getResource(consentProcessingLink,BehandlingResource.class).toFuture().get();
-        Map<String,List<Link>> processingLinks = processing.getLinksIfPresent();
+        Map<String, List<Link>> consentLinks = consent.getLinksIfPresent();
+        String consentProcessingLink = String.valueOf(consentLinks.get("behandling").get(0));
+        BehandlingResource processing = fintClient.getResource(consentProcessingLink, BehandlingResource.class).toFuture().get();
+        Map<String, List<Link>> processingLinks = processing.getLinksIfPresent();
         String processingBaseLink = String.valueOf(processingLinks.get("behandlingsgrunnlag").get(0));
         String personalDataLink = String.valueOf(processingLinks.get("personopplysning").get(0));
         String processorLink = String.valueOf(processingLinks.get("tjeneste").get(0));
-        TjenesteResource processor = fintClient.getResource(processorLink,TjenesteResource.class).toFuture().get();
-        PersonopplysningResource personalData = fintClient.getResource(personalDataLink,PersonopplysningResource.class).toFuture().get();
-        BehandlingsgrunnlagResource processingBase = fintClient.getResource(processingBaseLink,BehandlingsgrunnlagResource.class).toFuture().get();
+        TjenesteResource processor = fintClient.getResource(processorLink, TjenesteResource.class).toFuture().get();
+        PersonopplysningResource personalData = fintClient.getResource(personalDataLink, PersonopplysningResource.class).toFuture().get();
+        BehandlingsgrunnlagResource processingBase = fintClient.getResource(processingBaseLink, BehandlingsgrunnlagResource.class).toFuture().get();
 
         return apiConsent.builder()
                 .systemIdValue(consent.getSystemId().getIdentifikatorverdi())
@@ -165,24 +168,22 @@ public class ConsentService {
 
     public Mono<ApiConsent> updateConsent(String consentId, String processingId, boolean active, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         SamtykkeResource samtykkeResource = fintClient.getResource(fintEndpointConfiguration.getBaseUri()
-                + fintEndpointConfiguration.getConsentUri() +"systemid/" + consentId, SamtykkeResource.class).toFuture().get();
-        if (samtykkeResource != null){
+                + fintEndpointConfiguration.getConsentUri() + "systemid/" + consentId, SamtykkeResource.class).toFuture().get();
+        if (samtykkeResource != null) {
             if (samtykkeResource.getGyldighetsperiode().getStart() != null
                     && samtykkeResource.getGyldighetsperiode().getSlutt() == null
-                    && !active){
+                    && !active) {
                 samtykkeResource.getGyldighetsperiode().setSlutt(Date.from(Clock.systemUTC().instant()));
                 Mono.just(fintClient.putResource(fintEndpointConfiguration.getBaseUri()
                         + fintEndpointConfiguration.getConsentUri()
-                        + "systemid/" + consentId, samtykkeResource,SamtykkeResource.class ));
-                return Mono.just(createApiConsent(principal,samtykkeResource,false));
-            }
-
-            else if (samtykkeResource.getGyldighetsperiode().getSlutt() != null && active){
+                        + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class));
+                return Mono.just(createApiConsent(principal, samtykkeResource, false));
+            } else if (samtykkeResource.getGyldighetsperiode().getSlutt() != null && active) {
                 BehandlingResource behandlingResource = fintClient.getResource(fintEndpointConfiguration.getBaseUri()
                         + fintEndpointConfiguration.getProcessingUri()
                         + "systemid" + processingId, BehandlingResource.class).toFuture().get();
                 String behandlingsResourceId = behandlingResource.getSystemId().getIdentifikatorverdi();
-                return addConsent(behandlingsResourceId,principal);
+                return addConsent(behandlingsResourceId, principal);
 
             }
 

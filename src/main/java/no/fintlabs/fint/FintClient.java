@@ -60,14 +60,15 @@ public class FintClient {
     }
 
 
-    public <K,T> Mono<ResponseEntity<Void>> postResource(String url, T request,Class<K> clazz){
+    public <K, T> Mono<ResponseEntity<Void>> postResource(String url, T request, Class<K> clazz) {
         return webClient.post()
                 .uri(url)
                 .body(BodyInserters.fromValue(request))
                 .retrieve()
                 .toBodilessEntity();
     }
-    public <K,T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz){
+
+    public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {
         return webClient.put()
                 .uri(url)
                 .body(BodyInserters.fromValue(request))
