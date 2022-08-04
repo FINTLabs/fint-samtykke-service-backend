@@ -69,11 +69,14 @@ public class FintClient {
     }
 
     public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {
-        return webClient.put()
+
+        Mono<ResponseEntity<Void>> responseEntity = webClient.put()
                 .uri(url)
                 .body(BodyInserters.fromValue(request))
                 .retrieve()
                 .toBodilessEntity();
+
+        return responseEntity;
     }
 
     @Data

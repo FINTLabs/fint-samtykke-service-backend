@@ -1,4 +1,4 @@
-package no.fintlabs.consent;
+package no.fintlabs.apiConsent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,7 @@
 package no.fintlabs.consent;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fintlabs.apiConsent.ApiConsent;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,7 @@ public class ConsentController {
 
     @PutMapping("/{consentId}/{processingId}/{active}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Mono<ApiConsent> updateApiConsent(@PathVariable String consentId, String processingId, boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+    public Mono<ApiConsent> updateApiConsent(@PathVariable String consentId, @PathVariable String processingId, @PathVariable boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return consentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
     }
 
