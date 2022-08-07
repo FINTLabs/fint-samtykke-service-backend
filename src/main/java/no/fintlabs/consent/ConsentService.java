@@ -190,10 +190,11 @@ public class ConsentService {
                 }
                 samtykkeResource.setGyldighetsperiode(periode);
                 //samtykkeResource.getGyldighetsperiode().setSlutt(Date.from(Clock.systemUTC().instant()));
-                Mono.just(fintClient.putResource(fintEndpointConfiguration.getBaseUri()
+                ResponseEntity response = fintClient.putResource(fintEndpointConfiguration.getBaseUri()
                         + fintEndpointConfiguration.getConsentUri()
-                        + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class));
-                return Mono.just(apiConsentService.create(principal, samtykkeResource, false));
+                        + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
+                SamtykkeResource updatedConsent = fintClient.getResource(response.getHeaders().getLocation().toString(),SamtykkeResource.class).toFuture().get();
+                return Mono.just(apiConsentService.create(principal, updatedConsent, false));
             } else if (samtykkeResource.getGyldighetsperiode().getSlutt() != null && active) {
                 BehandlingResource behandlingResource = fintClient.getResource(fintEndpointConfiguration.getBaseUri()
                         + fintEndpointConfiguration.getProcessingUri()

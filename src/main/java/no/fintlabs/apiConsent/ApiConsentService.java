@@ -31,7 +31,7 @@ public class ApiConsentService {
             SamtykkeResource consent,
             boolean active) throws ExecutionException, InterruptedException {
         ApiConsent apiConsent = new ApiConsent();
-        String systemIdValue = consent.getSystemId().getIdentifikatorverdi();
+        //String systemIdValue = consent.getSystemId().getIdentifikatorverdi();
         Map<String, List<Link>> consentLinks = consent.getLinksIfPresent();
         String consentProcessingLink = String.valueOf(consentLinks.get("behandling").get(0));
         BehandlingResource processing = fintClient.getResource(consentProcessingLink, BehandlingResource.class).toFuture().get();
@@ -47,8 +47,9 @@ public class ApiConsentService {
                 .systemIdValue(consent.getSystemId().getIdentifikatorverdi())
                 .processorName(processor.getNavn())
                 .expirationDate(consent.getGyldighetsperiode())
-                .active(consent.getGyldighetsperiode().getSlutt() == null &&
-                        consent.getGyldighetsperiode().getStart() != null)
+                .active(active)
+//                .active(consent.getGyldighetsperiode().getSlutt() == null &&
+//                        consent.getGyldighetsperiode().getStart() != null)
                 .personalDataName(personalData.getNavn())
                 .processing(processing)
                 .processingBase(processingBase)
