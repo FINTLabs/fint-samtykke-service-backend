@@ -22,6 +22,9 @@ import reactor.core.publisher.Mono;
 import java.time.Clock;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -135,12 +138,14 @@ public class ConsentService {
             consent.addBehandling(processingLink);
         }
 
-        ResponseEntity response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
+        ResponseEntity<Void> response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
                 + fintEndpointConfiguration.getConsentUri(), consent, SamtykkeResource.class).toFuture().get();
+        log.info("Added new consent with status : " + response.getStatusCode().name());
+        log.info("Location uri til new consent : " + response.getHeaders().getLocation().toString());
 
-        log.info("New consent created : " + response.getHeaders().getLocation().toString());
-        log.info("Status code : " + response.getStatusCode().name());
-        //TODO Add timer if not created
+        ResponseEntity rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
+        log.info("Created new consent with status :" + rs.getStatusCode().name());
+
         SamtykkeResource createdConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
         return Mono.just(apiConsentService.create(principal, createdConsent, true));
@@ -193,6 +198,20 @@ public class ConsentService {
                 ResponseEntity response = fintClient.putResource(fintEndpointConfiguration.getBaseUri()
                         + fintEndpointConfiguration.getConsentUri()
                         + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
+
+                final String[] accepted = {new String()};
+                Runnable checkIfConsentAdded = new Runnable() {
+                    public void run() {
+                        accepted[0] = response.getStatusCode().name();
+                    }
+                };
+
+                while (!accepted[0].equalsIgnoreCase("CREATED")){
+                    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+                    executor.scheduleAtFixedRate(checkIfConsentAdded, 0, 10, TimeUnit.MILLISECONDS);
+                }
+
+
                 SamtykkeResource updatedConsent = fintClient.getResource(response.getHeaders().getLocation().toString(),SamtykkeResource.class).toFuture().get();
                 return Mono.just(apiConsentService.create(principal, updatedConsent, false));
             } else if (samtykkeResource.getGyldighetsperiode().getSlutt() != null && active) {
