@@ -76,7 +76,8 @@ public class FintClient {
     }
 
     public Mono<ResponseEntity<Void>> waitUntilCreated(String url, int firstBackoff , int maxBackOff){
-        Mono<ResponseEntity<Void>> responseEntity = webClient.head()
+
+        return webClient.head()
                 .uri(url)
                 .retrieve()
                 .toBodilessEntity()
@@ -84,19 +85,15 @@ public class FintClient {
                 .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> true)
                     .exponentialBackoff(Duration.ofMillis(firstBackoff),Duration.ofMillis(maxBackOff))
                     .timeout(Duration.ofSeconds(30)));
-
-        return responseEntity;
     }
 
     public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {
 
-        Mono<ResponseEntity<Void>> responseEntity = webClient.put()
+        return webClient.put()
                 .uri(url)
                 .body(BodyInserters.fromValue(request))
                 .retrieve()
                 .toBodilessEntity();
-
-        return responseEntity;
     }
 
     @Data
