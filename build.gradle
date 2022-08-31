@@ -27,16 +27,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    //implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    //implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    //implementation 'org.springframework.boot:spring-boot-starter-security'
-    //implementation 'org.springframework.boot:spring-boot-starter-web'
 
-
-    //implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    //implementation 'org.apache.kafka:kafka-streams'
-    //implementation 'org.springframework.kafka:spring-kafka'
 
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final:osx-aarch_64'
 
@@ -58,9 +50,6 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
     compileOnly 'io.projectreactor.addons:reactor-extra:3.4.8'
 
-
-    //testImplementation 'org.springframework.kafka:spring-kafka-test'
-    //testImplementation 'org.springframework.security:spring-security-test'
     implementation 'no.fint:fint-felles-resource-model-java:3.10.0'
     implementation 'no.fint:fint-administrasjon-resource-model-java:3.10.0'
     implementation 'no.fint:fint-model-resource:0.4.1'
