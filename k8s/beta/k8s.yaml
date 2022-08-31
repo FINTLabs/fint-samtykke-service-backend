@@ -4,39 +4,39 @@ metadata:
   annotations:
     service.beta.kubernetes.io/azure-load-balancer-internal: "true"
   labels:
-    io.kompose.service: spring-boot-template-project
-  name: spring-boot-template-project
+    io.kompose.service: fint-samtykke-service-backend
+  name: fint-samtykke-service-backend
 spec:
   ports:
     - name: "8080"
       port: 8080
   type: LoadBalancer
   selector:
-    io.kompose.service: spring-boot-template-project
+    io.kompose.service: fint-samtykke-service-backend
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
   labels:
-    io.kompose.service: spring-boot-template-project
-  name: spring-boot-template-project
+    io.kompose.service: fint-samtykke-service-backend
+  name: fint-samtykke-service-backend
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      io.kompose.service: spring-boot-template-project
+      io.kompose.service: fint-samtykke-service-backend
   template:
     metadata:
       labels:
-        io.kompose.service: spring-boot-template-project
+        io.kompose.service: fint-samtykke-service-backend
     spec:
       restartPolicy: Always
       containers:
-        - image: fintlabsacr.azurecr.io/spring-boot-template-project:build.${BUILD_NUMBER}_${GIT_COMMIT}
-          name: spring-boot-template-project
+        - image: fintlabsacr.azurecr.io/fint-samtykke-service-backend:build.${BUILD_NUMBER}_${GIT_COMMIT}
+          name: fint-samtykke-service-backend
           resources:
             limits:
               memory: "512Mi"
