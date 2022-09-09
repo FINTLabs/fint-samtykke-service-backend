@@ -17,27 +17,27 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api")
 
 public class ConsentController {
-    private final ConsentService consentService;
+//    private final ConsentService consentService;
+//
+//    public ConsentController(ConsentService consentService) {
+//        this.consentService = consentService;
+//    }
 
-    public ConsentController(ConsentService consentService) {
-        this.consentService = consentService;
-    }
+//    @GetMapping("/consents")
+//    public Mono<List<ApiConsent>> getApiConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+//        return consentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
+//    }
 
-    @GetMapping("/consents")
-    public Mono<List<ApiConsent>> getApiConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        return consentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
-    }
+//    @PostMapping("/{processingId}")
+//    public Mono<ApiConsent> addApiConsent(@PathVariable String processingId, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+//        return consentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
+//    }
 
-    @PostMapping("/{processingId}")
-    public Mono<ApiConsent> addApiConsent(@PathVariable String processingId, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        return consentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
-    }
-
-    @PutMapping("/{consentId}/{processingId}/{active}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Mono<ApiConsent> updateApiConsent(@PathVariable String consentId, @PathVariable String processingId, @PathVariable boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        return consentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
-    }
+//    @PutMapping("/{consentId}/{processingId}/{active}")
+//    @ResponseStatus(HttpStatus.ACCEPTED)
+//    public Mono<ApiConsent> updateApiConsent(@PathVariable String consentId, @PathVariable String processingId, @PathVariable boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+//        return consentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
+//    }
 
 
 
