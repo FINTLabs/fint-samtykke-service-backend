@@ -1,4 +1,4 @@
-package no.fintlabs.apiConsent;
+package no.fintlabs.apiconsent;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
@@ -47,10 +47,7 @@ public class ApiConsentService {
         this.personService = personService;
     }
 
-    public ApiConsent create(
-            FintJwtEndUserPrincipal principal,
-            SamtykkeResource consent,
-            boolean active) throws ExecutionException, InterruptedException {
+    private ApiConsent buildApiConsent( SamtykkeResource consent, boolean active) throws ExecutionException, InterruptedException {
         ApiConsent apiConsent = new ApiConsent();
         Map<String, List<Link>> consentLinks = consent.getLinksIfPresent();
         String consentProcessingLink = String.valueOf(consentLinks.get("behandling").get(0));
@@ -72,19 +69,6 @@ public class ApiConsentService {
                 .processing(processing)
                 .processingBase(processingBase)
                 .build();
-    }
-
-
-    public Mono<List<ApiConsent>> getApiConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-
-        SamtykkeResources samtykkeResources = Objects.requireNonNull(consentService.getFilteredConsents(principal).toFuture().get());
-
-        List<ApiConsent> apiConsents = Objects.requireNonNull(processingService.getProcessings(principal).toFuture().get().getContent())
-                .stream()
-                .map(behandlingResource -> buildApiConsent(samtykkeResources, behandlingResource))
-                .collect(Collectors.toList());
-
-        return Mono.just(apiConsents);
     }
 
     private ApiConsent buildApiConsent(SamtykkeResources samtykkeResources, BehandlingResource behandlingResource) {
@@ -128,6 +112,19 @@ public class ApiConsentService {
                 .processingBase(processingBase)
                 .build();
     }
+    public Mono<List<ApiConsent>> getApiConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
+
+        SamtykkeResources samtykkeResources = Objects.requireNonNull(consentService.getFilteredConsents(principal).toFuture().get());
+
+        List<ApiConsent> apiConsents = Objects.requireNonNull(processingService.getProcessings(principal).toFuture().get().getContent())
+                .stream()
+                .map(behandlingResource -> buildApiConsent(samtykkeResources, behandlingResource))
+                .collect(Collectors.toList());
+
+        return Mono.just(apiConsents);
+    }
+
+
 
     public Mono<ApiConsent> addConsent(String processingId, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         Link processingLink = new Link(fintEndpointConfiguration.getBaseUri() + fintEndpointConfiguration.getProcessingUri()
@@ -165,7 +162,7 @@ public class ApiConsentService {
 
         SamtykkeResource createdConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
-        return Mono.just(create(principal, createdConsent, true));
+        return Mono.just(buildApiConsent( createdConsent, true));
     }
 
     public Mono<ApiConsent> updateConsent(String consentId, String processingId, boolean active, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
@@ -188,12 +185,12 @@ public class ApiConsentService {
                         + fintEndpointConfiguration.getConsentUri()
                         + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
 
-                log.info("Consent updated : withdrawn sent : " + response.getStatusCode().name());
+                log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
                 ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
-                log.info("Consent updated : withdrawn confirmed : " + rs.getStatusCode().name());
+                log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
 
                 SamtykkeResource updatedConsent = fintClient.getResource(response.getHeaders().getLocation().toString(),SamtykkeResource.class).toFuture().get();
-                return Mono.just(create(principal, updatedConsent, false));
+                return Mono.just(buildApiConsent(updatedConsent, false));
 
                 // consent withdrawn -> consent given :: new consent
             } else if (samtykkeResource.getGyldighetsperiode().getSlutt() != null && active) {

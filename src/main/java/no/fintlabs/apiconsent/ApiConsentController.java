@@ -1,4 +1,4 @@
-package no.fintlabs.apiConsent;
+package no.fintlabs.apiconsent;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +29,17 @@ public class ApiConsentController {
     }
 
     @PostMapping("/{processingId}")
-    public Mono<ApiConsent> addApiConsent(@PathVariable String processingId, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+    public Mono<ApiConsent> addApiConsent(@PathVariable String processingId,
+                                          @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return apiConsentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
     }
 
     @PutMapping("/{consentId}/{processingId}/{active}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Mono<ApiConsent> updateApiConsent(@PathVariable String consentId, @PathVariable String processingId, @PathVariable boolean active, @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+    public Mono<ApiConsent> updateApiConsent(@PathVariable String consentId,
+                                             @PathVariable String processingId,
+                                             @PathVariable boolean active,
+                                             @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return apiConsentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
     }
 }
