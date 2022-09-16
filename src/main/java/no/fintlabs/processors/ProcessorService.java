@@ -6,10 +6,11 @@ import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-@Component
+@Service
 public class ProcessorService {
     private final FintClient fintClient;
     private final FintEndpointConfiguration fintEndpointConfiguration;
@@ -19,9 +20,9 @@ public class ProcessorService {
         this.fintEndpointConfiguration = fintEndpointConfiguration;
     }
 
-    public Mono<TjenesteResources> getProcessors(FintJwtEndUserPrincipal principal){
-        Mono<TjenesteResources> processors = fintClient.getResource(fintEndpointConfiguration.getBaseUri()+
-                fintEndpointConfiguration.getProcessorsUri(),TjenesteResources.class);
+    public Mono<TjenesteResources> getProcessors(FintJwtEndUserPrincipal principal) {
+        Mono<TjenesteResources> processors = fintClient.getResource(fintEndpointConfiguration.getBaseUri() +
+                fintEndpointConfiguration.getProcessorsUri(), TjenesteResources.class);
         return processors;
     }
 }

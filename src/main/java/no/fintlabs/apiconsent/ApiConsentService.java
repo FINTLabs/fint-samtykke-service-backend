@@ -17,6 +17,7 @@ import no.fintlabs.processing.ProcessingService;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Clock;
@@ -25,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Component
+@Service
 public class ApiConsentService {
 
     private final FintClient fintClient;

@@ -8,13 +8,14 @@ import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
-@Component
+@Service
 public class PersonService {
 
     private final FintClient fintClient;
@@ -26,35 +27,17 @@ public class PersonService {
     }
 
     public Person getPerson(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        PersonResource personResource = fintClient.getResource(
-                fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(),PersonResource.class)
-                .toFuture().get();
-        Map<String,List<Link>> personResourceLinks = personResource.getLinks();
-        List<Link> personLinks = personResourceLinks.get("person");
-        String personLink = personLinks.get(0).toString();
-
-        Person person = fintClient.getResource(personLink,Person.class)
-                .toFuture().get();
-        return person;
+        return fintClient.getResource(getPersonUri(principal), Person.class).toFuture().get();
     }
 
     public String getPersonUri(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        PersonResource personResource = fintClient.getResource(
-                fintEndpointConfiguration
-                .getEmployeeUri() + principal.getEmployeeId(), PersonResource.class)
-                .toFuture().get();
-        Map<String,List<Link>> personResourceLinks = personResource.getLinks();
+        PersonResource personResource = fintClient.getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class).toFuture().get();
+        Map<String, List<Link>> personResourceLinks = personResource.getLinks();
         List<Link> personLinks = personResourceLinks.get("person");
-        String personLink = personLinks.get(0).toString();
-        return personLink;
+        return personLinks.get(0).toString();
     }
 
     public PersonResource getPersonResource(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        return fintClient
-                .getResource(
-                        fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(),
-                        PersonResource.class)
-                .toFuture()
-                .get();
+        return fintClient.getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class).toFuture().get();
     }
 }
