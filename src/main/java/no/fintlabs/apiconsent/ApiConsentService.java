@@ -47,7 +47,25 @@ public class ApiConsentService {
         this.personService = personService;
     }
 
-    private ApiConsent buildApiConsent( SamtykkeResource consent, boolean active) throws ExecutionException, InterruptedException {
+    public Mono<List<ApiConsent>> getApiConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
+
+        SamtykkeResources samtykkeResources = Objects.requireNonNull(consentService.getFilteredConsents(principal).toFuture().get());
+
+        List<ApiConsent> apiConsents = Objects.requireNonNull(processingService.getProcessings(principal).toFuture().get().getContent())
+                .stream()
+                .map(behandlingResource -> {
+                    try {
+                        return buildApiConsent(samtykkeResources, behandlingResource, principal);
+                    } catch (ExecutionException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+
+        return Mono.just(apiConsents);
+    }
+
+    private ApiConsent buildApiConsent(SamtykkeResource consent, boolean active) throws ExecutionException, InterruptedException {
         ApiConsent apiConsent = new ApiConsent();
         Map<String, List<Link>> consentLinks = consent.getLinksIfPresent();
         String consentProcessingLink = String.valueOf(consentLinks.get("behandling").get(0));
@@ -71,12 +89,22 @@ public class ApiConsentService {
                 .build();
     }
 
-    private ApiConsent buildApiConsent(SamtykkeResources samtykkeResources, BehandlingResource behandlingResource) {
+    private ApiConsent buildApiConsent(SamtykkeResources samtykkeResources, BehandlingResource behandlingResource, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
 
+        String behandlingSelfLink = String.valueOf(behandlingResource.getSelfLinks().get(0));
+        log.debug("ProcessingSelfLink to compare : " + behandlingSelfLink);
         SamtykkeResource samtykkeResource = samtykkeResources.getContent().stream()
+                .filter(con -> consentService.getConsentProcessingUri(con).equals(behandlingSelfLink))
                 .filter(con -> con.getGyldighetsperiode().getStart() != null)
                 .max(Comparator.comparing(p -> p.getGyldighetsperiode().getStart()))
-                .orElse(new SamtykkeResource());
+                .orElseGet(() -> {
+                    try {
+                        return consentService.addConsent(behandlingResource.getSystemId().getIdentifikatorverdi(), principal);
+                    } catch (ExecutionException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
 
         Map<String, List<Link>> processingsLinks = behandlingResource.getLinks();
         String processingBaseLink = String.valueOf(processingsLinks.get("behandlingsgrunnlag").get(0));
@@ -112,18 +140,6 @@ public class ApiConsentService {
                 .processingBase(processingBase)
                 .build();
     }
-    public Mono<List<ApiConsent>> getApiConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-
-        SamtykkeResources samtykkeResources = Objects.requireNonNull(consentService.getFilteredConsents(principal).toFuture().get());
-
-        List<ApiConsent> apiConsents = Objects.requireNonNull(processingService.getProcessings(principal).toFuture().get().getContent())
-                .stream()
-                .map(behandlingResource -> buildApiConsent(samtykkeResources, behandlingResource))
-                .collect(Collectors.toList());
-
-        return Mono.just(apiConsents);
-    }
-
 
 
     public Mono<ApiConsent> addConsent(String processingId, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
@@ -162,7 +178,7 @@ public class ApiConsentService {
 
         SamtykkeResource createdConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
-        return Mono.just(buildApiConsent( createdConsent, true));
+        return Mono.just(buildApiConsent(createdConsent, true));
     }
 
     public Mono<ApiConsent> updateConsent(String consentId, String processingId, boolean active, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
@@ -189,7 +205,7 @@ public class ApiConsentService {
                 ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
                 log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
 
-                SamtykkeResource updatedConsent = fintClient.getResource(response.getHeaders().getLocation().toString(),SamtykkeResource.class).toFuture().get();
+                SamtykkeResource updatedConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
                 return Mono.just(buildApiConsent(updatedConsent, false));
 
                 // consent withdrawn -> consent given :: new consent
@@ -206,7 +222,6 @@ public class ApiConsentService {
         log.info("Update consent : No consents found for systemId : " + consentId);
         return null;
     }
-
 
 
 }

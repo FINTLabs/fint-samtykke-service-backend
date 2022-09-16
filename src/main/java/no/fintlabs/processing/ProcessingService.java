@@ -21,4 +21,5 @@ public class ProcessingService {
         return fintclient.getResource(fintEndpointConfiguration.getBaseUri() +
                 fintEndpointConfiguration.getProcessingUri(), BehandlingResources.class);
     }
+
 }
