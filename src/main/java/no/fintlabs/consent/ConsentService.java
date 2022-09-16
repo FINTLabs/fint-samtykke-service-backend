@@ -45,9 +45,9 @@ public class ConsentService {
 
     public String getConsentProcessingUri(SamtykkeResource consent) {
         Map<String, List<Link>> consentLinks = consent.getLinks();
-        String consentProcessingLink = String.valueOf(consentLinks.get("behandling").get(0));
-        return consentProcessingLink;
+        return String.valueOf(consentLinks.get("behandling").get(0));
     }
+
     public SamtykkeResource addConsent(String processingId, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         Link processingLink = new Link(fintEndpointConfiguration.getBaseUri() + fintEndpointConfiguration.getProcessingUri()
                 + "systemid/" + processingId);
@@ -82,9 +82,7 @@ public class ConsentService {
         ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
         log.info("Created new consent with status :" + rs.getStatusCode().name());
 
-        SamtykkeResource createdConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
-
-        return createdConsent;
+        return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
 
     }
