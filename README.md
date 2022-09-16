@@ -1,1 +1,1 @@
-# fint-samtykke-backend-v2
+# fint-samtykke-service-backend

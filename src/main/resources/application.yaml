@@ -14,6 +14,7 @@ fint:
       studentUri: utdanning/elev/elev/elevnummer/
       studentssnUri: utdanning/elev/person/fodselsnummer/
       consentUri: personvern/samtykke/samtykke/
+      processorsUri: personvern/samtykke/tjeneste/
       processorUri: personvern/samtykke/tjeneste/systemid/
       processingUri: personvern/samtykke/behandling/
       processingbaseUri: personvern/kodeverk/behandlingsgrunnlag/systemid/

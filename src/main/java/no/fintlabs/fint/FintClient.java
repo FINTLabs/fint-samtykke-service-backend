@@ -1,10 +1,14 @@
 package no.fintlabs.fint;
 
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.retry.Repeat;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,6 +59,40 @@ public class FintClient {
                 .uri(endpoint)
                 .retrieve()
                 .bodyToMono(clazz);
+    }
+
+
+    public <K, T> Mono<ResponseEntity<Void>> postResource(String url, T request, Class<K> clazz) {
+        return webClient.post()
+                .uri(url)
+                .body(BodyInserters.fromValue(request))
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public Mono<ResponseEntity<Void>> waitUntilCreated(String url){
+        return waitUntilCreated(url,5,100);
+    }
+
+    public Mono<ResponseEntity<Void>> waitUntilCreated(String url, int firstBackoff , int maxBackOff){
+
+        return webClient.head()
+                .uri(url)
+                .retrieve()
+                .toBodilessEntity()
+                .filter(response -> response.getStatusCode().name().equalsIgnoreCase("CREATED"))
+                .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> true)
+                    .exponentialBackoff(Duration.ofMillis(firstBackoff),Duration.ofMillis(maxBackOff))
+                    .timeout(Duration.ofSeconds(30)));
+    }
+
+    public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {
+
+        return webClient.put()
+                .uri(url)
+                .body(BodyInserters.fromValue(request))
+                .retrieve()
+                .toBodilessEntity();
     }
 
     @Data
