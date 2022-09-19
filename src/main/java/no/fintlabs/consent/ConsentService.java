@@ -87,4 +87,28 @@ public class ConsentService {
 
 
     }
+
+    public SamtykkeResource withdrawConsent(SamtykkeResource samtykkeResource, String consentId) throws ExecutionException, InterruptedException {
+
+        Periode periode = new Periode();
+        {
+            periode.setBeskrivelse("Samtykke trukket");
+            periode.setStart(samtykkeResource.getGyldighetsperiode().getStart());
+            periode.setSlutt(Date.from(Clock.systemUTC().instant()));
+        }
+        samtykkeResource.setGyldighetsperiode(periode);
+
+        ResponseEntity<Void> response = fintClient.putResource(fintEndpointConfiguration
+                .getBaseUri() + fintEndpointConfiguration
+                .getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
+
+        log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
+        ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
+        log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
+
+
+            SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+
+        return withdrawnConsent;
+    }
 }
