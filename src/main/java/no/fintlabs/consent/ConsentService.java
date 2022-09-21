@@ -5,20 +5,16 @@ import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.felles.kompleksedatatyper.Periode;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.personvern.samtykke.*;
-import no.fintlabs.apiconsent.ApiConsent;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import no.fintlabs.person.PersonService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Clock;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -107,8 +103,19 @@ public class ConsentService {
         log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
 
 
-            SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+        SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
         return withdrawnConsent;
+    }
+
+    public Optional<SamtykkeResource> findNewestConsent(SamtykkeResources samtykkeResources, BehandlingResource behandlingResource) {
+        String behandlingSelfLink = String.valueOf(behandlingResource.getSelfLinks().get(0));
+        log.debug("ProcessingSelfLink to compare : " + behandlingSelfLink);
+        return samtykkeResources.getContent()
+                .stream()
+                .filter(con -> getConsentProcessingUri(con)
+                        .equals(behandlingSelfLink))
+                .filter(con -> con.getGyldighetsperiode().getStart() != null)
+                .max(Comparator.comparing(p -> p.getGyldighetsperiode().getStart()));
     }
 }
