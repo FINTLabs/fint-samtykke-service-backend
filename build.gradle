@@ -43,7 +43,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
-    compileOnly 'io.projectreactor.addons:reactor-extra:3.4.8'
+    implementation 'io.projectreactor.addons:reactor-extra:3.4.8'
 
     testImplementation 'no.fint:fint-test-utils:0.0.6'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -51,7 +51,6 @@ dependencies {
     testImplementation 'cglib:cglib-nodep:3.3.0'
     testImplementation 'org.spockframework:spock-spring:2.0-groovy-3.0'
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
-    //testCompileOnly 'net.bytebuddy:byte-buddy-maven-plugin:1.9.11'
 
     implementation 'no.fint:fint-felles-resource-model-java:3.10.0'
     implementation 'no.fint:fint-administrasjon-resource-model-java:3.10.0'

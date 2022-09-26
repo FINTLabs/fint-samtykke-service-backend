@@ -12,6 +12,8 @@ import no.fintlabs.fint.FintEndpointConfiguration
 import no.fintlabs.person.PersonService
 import spock.lang.Specification
 
+
+
 class ConsentServiceSpec extends Specification{
     private ConsentService consentService
 
@@ -19,31 +21,16 @@ class ConsentServiceSpec extends Specification{
     private FintEndpointConfiguration fintEndpointConfiguration
     private PersonService personService
 
-    private SamtykkeResources samtykkeResources
     private BehandlingResource behandlingResource
 
-    private SamtykkeResource samtykkeResourceNewest
-    private SamtykkeResource samtykkeResourceOldest
+    private SamtykkeResources samtykkeResources = new SamtykkeResources()
+    private SamtykkeResource samtykkeResourceNewest = new SamtykkeResource()
+    private SamtykkeResource samtykkeResourceOldest = new SamtykkeResource()
 
-
-
-
-
-    def 'test'(){
-        given:
-        int i
-        fintClient = Mock()
-
-        when:
-        i = 3
-
-        then:
-        i == 3
-    }
 
     def 'find newest consent'(){
         given:
-        FintClient fintClient = Mock()
+        fintClient = Mock()
         fintEndpointConfiguration = Mock()
         personService = Mock()
         consentService = new ConsentService(
@@ -52,23 +39,29 @@ class ConsentServiceSpec extends Specification{
                personService)
 
         behandlingResource = new BehandlingResource()
-        behandlingResource.addSelf("abcd" as Link)
-
-        samtykkeResources = Mock(SamtykkeResources.class)
+        Link behandlingSelfLink = new Link("abcd")
+        behandlingResource.addSelf(behandlingSelfLink)
 
         Periode periodeNewest = new Periode()
         periodeNewest.setBeskrivelse("newest consent")
-        periodeNewest.setStart("2022-09-19T13:23:27" as Date)
-        samtykkeResourceNewest.addBehandling("abcd" as Link)
-        samtykkeResourceNewest.setSystemId("1234" as Identifikator)
+        periodeNewest.setStart(new Date(1664180000))
+        Link samtykkeBehandlingsLink = new Link("abcd")
+        samtykkeResourceNewest.addBehandling(samtykkeBehandlingsLink)
+        Identifikator samtykkeNewestId = new Identifikator()
+        samtykkeNewestId.setGyldighetsperiode(periodeNewest)
+        samtykkeNewestId.setIdentifikatorverdi("1234")
+        samtykkeResourceNewest.setSystemId(samtykkeNewestId)
         samtykkeResourceNewest.setGyldighetsperiode(periodeNewest)
         samtykkeResources.addResource(samtykkeResourceNewest)
 
         Periode periodeOldest = new Periode()
         periodeOldest.setBeskrivelse("Oldest consent")
-        periodeOldest.setStart("2022-09-21T13:23:27" as Date)
-        samtykkeResourceOldest.addBehandling("abcd" as Link)
-        samtykkeResourceOldest.setSystemId("5678" as Identifikator)
+        periodeOldest.setStart(new Date(1660000000))
+        samtykkeResourceOldest.addBehandling(samtykkeBehandlingsLink)
+        Identifikator samtykkeOldestId = new Identifikator()
+        samtykkeOldestId.setGyldighetsperiode(periodeOldest)
+        samtykkeOldestId.setIdentifikatorverdi("5678")
+        samtykkeResourceOldest.setSystemId(samtykkeOldestId)
         samtykkeResourceOldest.setGyldighetsperiode(periodeOldest)
         samtykkeResources.addResource(samtykkeResourceOldest)
 
