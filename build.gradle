@@ -33,7 +33,7 @@ dependencies {
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final:osx-aarch_64'
 
     implementation 'no.fint:fint-personvern-resource-model-java:3.10.0'
-    implementation('no.fint:fint-administrasjon-resource-model-java:3.10.0')
+    implementation 'no.fint:fint-administrasjon-resource-model-java:3.10.0'
     implementation 'no.fint:fint-utdanning-resource-model-java:3.10.0-rc-1'
     implementation 'no.fintlabs:fint-resource-server-security:1.1.0'
     implementation 'io.projectreactor:reactor-core'
@@ -43,12 +43,14 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
+    implementation 'io.projectreactor.addons:reactor-extra:3.4.8'
+
+    testImplementation 'no.fint:fint-test-utils:0.0.6'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'cglib:cglib-nodep:3.3.0'
     testImplementation 'org.spockframework:spock-spring:2.0-groovy-3.0'
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
-    compileOnly 'io.projectreactor.addons:reactor-extra:3.4.8'
 
     implementation 'no.fint:fint-felles-resource-model-java:3.10.0'
     implementation 'no.fint:fint-administrasjon-resource-model-java:3.10.0'
