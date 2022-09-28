@@ -49,6 +49,13 @@ spring:
             client-secret:
             provider: fint-idp
             scope: fint-client
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
