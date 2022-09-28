@@ -5,6 +5,10 @@ fint:
     username: ''
     base-url: https://beta.felleskomponent.no
     registration-id: fint
+  integration:
+    service:
+      authorized-role: https://role-catalog.vigoiks.no/vigo/samtykke/user
+
 
   concent:
     endpoints:

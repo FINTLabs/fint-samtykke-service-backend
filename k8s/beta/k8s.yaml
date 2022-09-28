@@ -1,3 +1,11 @@
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: fint-samtykke-service-backend
+  labels:
+spec:
+  itemPath: "vaults/aks-beta-vault/items/vigo-azure-ad-service"
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -50,6 +58,9 @@ spec:
               cpu: "100m"
           ports:
             - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name:
           env:
             - name: TZ
               value: Europe/Oslo
