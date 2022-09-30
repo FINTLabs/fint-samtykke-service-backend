@@ -1,13 +1,12 @@
 package no.fintlabs.person;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.felles.Person;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.felles.PersonResource;
+import no.fint.model.resource.utdanning.elev.ElevResource;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,18 +25,38 @@ public class PersonService {
         this.fintEndpointConfiguration = fintEndpointConfiguration;
     }
 
-    public Person getPerson(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        return fintClient.getResource(getPersonUri(principal), Person.class).toFuture().get();
-    }
-
     public String getPersonUri(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        PersonResource personResource = fintClient.getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class).toFuture().get();
-        Map<String, List<Link>> personResourceLinks = personResource.getLinks();
-        List<Link> personLinks = personResourceLinks.get("person");
-        return personLinks.get(0).toString();
+        //List<Link> personLinks;
+        if (principal.getEmployeeId() != null) {
+            PersonResource personRessurs = fintClient
+                    .getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class)
+                    .toFuture()
+                    .get();
+            Map<String, List<Link>> personResourceLinks = personRessurs.getLinks();
+            String personLink = personResourceLinks.get("person").get(0).getHref();
+            log.info("Found person : " + principal.getGivenName() + " " + principal.getSurname() + " as employee");
+            return personLink;
+        } else if (principal.getStudentNumber() != null) {
+            ElevResource elevResource = fintClient
+                    .getResource(fintEndpointConfiguration.getStudentUri() + principal.getStudentNumber(), ElevResource.class)
+                    .toFuture()
+                    .get();
+
+            String personLink = elevResource.getPerson().get(0).getHref();
+            log.info("Found person : " + principal.getGivenName() + " " + principal.getSurname() + " as student");
+            return personLink;
+
+        } else {
+            log.info("Token does not contain employeeNumber or studentId");
+            return null;
+        }
+
     }
 
     public PersonResource getPersonResource(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        return fintClient.getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class).toFuture().get();
+        PersonResource personResource;
+        String personLink = getPersonUri(principal);
+        personResource = fintClient.getResource(personLink, PersonResource.class).toFuture().get();
+        return personResource;
     }
 }

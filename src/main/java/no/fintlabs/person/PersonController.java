@@ -28,8 +28,4 @@ public class PersonController {
         return personService.getPersonResource(FintJwtEndUserPrincipal.from(jwt));
     }
 
-    @GetMapping
-    public Person getPerson(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        return personService.getPerson(FintJwtEndUserPrincipal.from(jwt));
-    }
 }

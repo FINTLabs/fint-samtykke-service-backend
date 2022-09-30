@@ -54,11 +54,11 @@ spring:
             provider: fint-idp
             scope: fint-client
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health,info,prometheus
 
   jackson:
     serialization:
