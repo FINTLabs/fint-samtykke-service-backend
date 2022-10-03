@@ -1,9 +1,7 @@
 package no.fintlabs.person;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.personal.PersonalressursResource;
-import no.fint.model.resource.administrasjon.personal.PersonalressursResources;
 import no.fint.model.resource.felles.PersonResource;
 import no.fint.model.resource.utdanning.elev.ElevResource;
 import no.fintlabs.fint.FintClient;
@@ -11,8 +9,7 @@ import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -28,14 +25,8 @@ public class PersonService {
     }
 
     public String getPersonUri(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        //List<Link> personLinks;
+
         if (principal.getEmployeeId() != null) {
-//            PersonResource personRessurs = fintClient
-//                    .getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(), PersonResource.class)
-//                    .toFuture()
-//                    .get();
-//            Map<String, List<Link>> personResourceLinks = personRessurs.getLinks();
-//            String personLink = personResourceLinks.get("person").get(0).getHref();
             PersonalressursResource personalressursResource = fintClient
                     .getResource(fintEndpointConfiguration.getEmployeeUri() + principal.getEmployeeId(),PersonalressursResource.class)
                     .toFuture()
@@ -43,6 +34,7 @@ public class PersonService {
             String personLink = personalressursResource.getPerson().get(0).getHref();
             log.info("Found person : " + principal.getGivenName() + " " + principal.getSurname() + " as employee");
             return personLink;
+
         } else if (principal.getStudentNumber() != null) {
             ElevResource elevResource = fintClient
                     .getResource(fintEndpointConfiguration.getStudentUri() + principal.getStudentNumber(), ElevResource.class)
