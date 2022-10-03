@@ -71,17 +71,6 @@ public class ConsentService {
             consent.addBehandling(processingLink);
         }
         return consent;
-//TODO: Skille ut denne som egen metode:
-//        ResponseEntity<Void> response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
-//                + fintEndpointConfiguration.getConsentUri(), consent, SamtykkeResource.class).toFuture().get();
-//        log.info("Added new consent with status : " + response.getStatusCode().name());
-//        log.debug("Location uri til new consent : " + response.getHeaders().getLocation().toString());
-//
-//        ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
-//        log.info("Created new consent with status :" + rs.getStatusCode().name());
-
-//        return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
-
 
     }
 
