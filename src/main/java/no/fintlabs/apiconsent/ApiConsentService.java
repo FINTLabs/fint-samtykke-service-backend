@@ -1,7 +1,6 @@
 package no.fintlabs.apiconsent;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.Link;
 import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
 import no.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
@@ -57,9 +56,10 @@ public class ApiConsentService {
         return Mono.just(apiConsents);
     }
 
+
     public Mono<ApiConsent> addConsent(String processingId,
                                        FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
-        SamtykkeResource createdConsent = consentService.addConsent(processingId, principal);
+        SamtykkeResource createdConsent = consentService.saveConsentToDatabase(consentService.addConsent(processingId, principal)) ;
 
         return Mono.just(buildApiConsent(createdConsent, true));
     }
@@ -137,7 +137,13 @@ public class ApiConsentService {
                                                       FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
 
         SamtykkeResource samtykkeResource = consentService.findNewestConsent(samtykkeResources, behandlingResource)
-                .orElseGet(() -> getNewSamtykke(behandlingResource, principal));
+                .orElseGet(() -> {
+                    try {
+                        return consentService.addConsent(behandlingResource.getSystemId().getIdentifikatorverdi(), principal);
+                    } catch (ExecutionException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         TjenesteResource processor;
         PersonopplysningResource personalData;
@@ -160,14 +166,6 @@ public class ApiConsentService {
                 .processing(behandlingResource)
                 .processingBase(processingBase)
                 .build();
-    }
-
-    private SamtykkeResource getNewSamtykke(BehandlingResource behandlingResource, FintJwtEndUserPrincipal principal) {
-        try {
-            return consentService.addConsent(behandlingResource.getSystemId().getIdentifikatorverdi(), principal);
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

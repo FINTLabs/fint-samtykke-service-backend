@@ -2,6 +2,7 @@ package no.fintlabs.apiconsent;
 
 
 import lombok.extern.slf4j.Slf4j;
+import no.fintlabs.consent.ConsentService;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ public class ApiConsentController {
     private final ApiConsentService apiConsentService;
 
 
+
     public ApiConsentController(ApiConsentService apiConsentService) {
         this.apiConsentService = apiConsentService;
     }
@@ -32,6 +34,7 @@ public class ApiConsentController {
     public Mono<ApiConsent> addApiConsent(@PathVariable String processingId,
                                           @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return apiConsentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
+
     }
 
     @PutMapping("/{consentId}/{processingId}/{active}")
