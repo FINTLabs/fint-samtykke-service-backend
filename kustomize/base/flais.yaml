@@ -1,0 +1,27 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: Application
+metadata:
+  name: vigobas-samtykke-backend-rogfk
+  namespace: rogfk-no
+  labels:
+    app.kubernetes.io/name: vigobas-samtykke-backend-rogfk
+    app.kubernetes.io/instance: vigobas-samtykke-backend-rogfk_rogfk_no
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: samtykke-backend
+    app.kubernetes.io/part-of: vigobas
+    fintlabs.no/team: bas
+    fintlabs.no/org-id: rogfk.no
+spec:
+  url:
+    hostname: 'samtykke.vigoiks.no/beta/rogfk-no'
+    basePath: '/api'
+  port: 8080
+  ingress:
+    enabled: true
+  orgId: rogfk.no
+  image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
+  imagePullPolicy: Always
+  envFrom:
+    - secretRef:
+        name: vigobas-samtykke-backend-fint-client
+  
