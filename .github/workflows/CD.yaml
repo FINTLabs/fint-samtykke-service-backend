@@ -56,7 +56,7 @@ jobs:
     strategy:
       matrix:
         org:
-          - fintlabs-no
+          - rogfk-no
         cluster:
           - aks-beta-fint-2021-11-23
 
