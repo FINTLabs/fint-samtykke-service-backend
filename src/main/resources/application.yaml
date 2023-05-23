@@ -1,10 +1,10 @@
 fint:
   org-id: fintlabs.no
   client:
-    password: ''
-    username: ''
-    base-url: https://beta.felleskomponent.no
     registration-id: fint
+    password: ${fint.core.oauth2.password}
+    username: ${fint.core.oauth2.username}
+    base-url: https://beta.felleskomponent.no
   integration:
     service:
       authorized-role: https://role-catalog.vigoiks.no/vigo/samtykke/user
@@ -49,8 +49,8 @@ spring:
         registration:
           fint:
             authorization-grant-type: password
-            client-id:
-            client-secret:
+            client-id: ${fint.core.oauth2.client-id}
+            client-secret: ${fint.core.oauth2.client-secret}
             provider: fint-idp
             scope: fint-client
 
