@@ -2,15 +2,7 @@ apiVersion: fintlabs.no/v1alpha1
 kind: FintClient
 metadata:
   name: vigobas-samtykke-backend-fint-client
-  namespace: fintlabs-no
-  labels:
-    app.kubernetes.io/name: vigobas-samtykke-backend-client
-    app.kubernetes.io/instance: vigobas-samtykke-backend-client_fintlabs_no
-    app.kubernetes.io/version: latest
-    app.kubernetes.io/component: samtykke-backend
-    app.kubernetes.io/part-of: vigobas
-    fintlabs.no/team: bas
-    fintlabs.no/org-id: fintlabs.no
+
 spec:
   orgId: fintlabs.no
   components:

@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: vigobas-samtykke-backend-rogfk
-data:
-  TZ: 'Europe/Oslo'

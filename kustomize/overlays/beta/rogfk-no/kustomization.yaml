@@ -4,19 +4,11 @@ namespace: rogfk-no
 resources:
   - ../../../base
 commonLabels:
-  app.kubernetes.io/name: vigobas-samtykke-backend-rogfk
-  app.kubernetes.io/instance: vigobas-samtykke-backend-rogfk_rogfk_no
-  app.kubernetes.io/version: latest
-  app.kubernetes.io/component: samtykke-backend
-  app.kubernetes.io/part-of: vigobas
-  fintlabs.no/team: bas
+  app.kubernetes.io/instance: vigobas-samtykke-backend_rogfk_no
   fintlabs.no/org-id: rogfk.no
 
 patches:
   - patch: |-
-      - op: replace
-        path: "/metadata/labels/app.kubernetes.io~1instance"
-        value: "vigobas-samtykke-backend-fint-client_rogfk_no"
       - op: replace
         path: "/spec/orgId"
         value: "rogfk.no"
