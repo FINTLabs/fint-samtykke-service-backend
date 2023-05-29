@@ -1,7 +1,7 @@
 apiVersion: fintlabs.no/v1alpha1
 kind: Application
 metadata:
-  name: vigobas-samtykke-backend-rogfk
+  name: vigobas-samtykke-backend
   namespace: rogfk-no
   labels:
     app.kubernetes.io/name: vigobas-samtykke-backend-rogfk
