@@ -2,15 +2,6 @@ apiVersion: fintlabs.no/v1alpha1
 kind: Application
 metadata:
   name: vigobas-samtykke-backend
-  namespace: rogfk-no
-  labels:
-    app.kubernetes.io/name: vigobas-samtykke-backend-rogfk
-    app.kubernetes.io/instance: vigobas-samtykke-backend-rogfk_rogfk_no
-    app.kubernetes.io/version: latest
-    app.kubernetes.io/component: samtykke-backend
-    app.kubernetes.io/part-of: vigobas
-    fintlabs.no/team: bas
-    fintlabs.no/org-id: rogfk.no
 spec:
   url:
     hostname: 'samtykke.vigoiks.no'
