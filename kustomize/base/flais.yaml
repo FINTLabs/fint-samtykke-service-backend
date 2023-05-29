@@ -17,6 +17,8 @@ spec:
     basePath: '/beta/rogfk-no/api'
   ingress:
     enabled: true
+    middlewares:
+      - vigobas-samtykke-frontend-sso
     #basePath: '/beta/rogfk-no/api'
   orgId: rogfk.no
   image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
