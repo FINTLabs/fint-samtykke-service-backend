@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/branding")
+@RequestMapping("/branding")
 public class BrandingController {
     private final FrontEndBrandingConfiguration frontEndBrandingConfiguration;
 
