@@ -22,3 +22,10 @@ patches:
     target:
       kind: Application
       name: vigobas-samtykke-backend
+  - patch: |-
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/beta/rogfk-no/api"
+    target:
+      kind: Application
+      name: vigobas-samtykke-backend
