@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping()
 public class ApiConsentController {
     private final ApiConsentService apiConsentService;
 
