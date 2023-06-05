@@ -9,12 +9,12 @@ spec:
   ingress:
     enabled: true
     middlewares:
-      - vigobas-samtykke-frontend-sso
+      - fint-samtykke-sso
     basePath: '/beta/rogfk-no/api'
   orgId: rogfk.no
   image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
   imagePullPolicy: Always
   envFrom:
     - secretRef:
-        name: vigobas-samtykke-backend-fint-client
+        name: fint-samtykke-service-backend-fint-client
   

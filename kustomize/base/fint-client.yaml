@@ -1,7 +1,7 @@
 apiVersion: fintlabs.no/v1alpha1
 kind: FintClient
 metadata:
-  name: vigobas-samtykke-backend-fint-client
+  name: fint-samtykke-service-backend-fint-client
 
 spec:
   orgId: fintlabs.no

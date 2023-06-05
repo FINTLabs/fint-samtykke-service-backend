@@ -4,7 +4,7 @@ namespace: rogfk-no
 resources:
   - ../../../base
 commonLabels:
-  app.kubernetes.io/instance: vigobas-samtykke-backend_rogfk_no
+  app.kubernetes.io/instance: fint-samtykke-service-backend_rogfk_no
   fintlabs.no/org-id: rogfk.no
 
 patches:
@@ -21,11 +21,11 @@ patches:
         value: "/beta/rogfk-no/api"
     target:
       kind: Application
-      name: vigobas-samtykke-backend
+      name: fint-samtykke-service-backend
   - patch: |-
       - op: replace
         path: "/spec/ingress/basePath"
         value: "/beta/rogfk-no/api"
     target:
       kind: Application
-      name: vigobas-samtykke-backend
+      name: fint-samtykke-service-backend
