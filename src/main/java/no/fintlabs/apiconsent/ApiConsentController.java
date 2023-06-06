@@ -25,7 +25,7 @@ public class ApiConsentController {
         this.apiConsentService = apiConsentService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public Mono<List<ApiConsent>> getApiConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return apiConsentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
     }

@@ -12,7 +12,7 @@ fint:
 
 spring:
   webflux:
-    base-path: /api
+    base-path: /
   security:
     oauth2:
       resourceserver:
