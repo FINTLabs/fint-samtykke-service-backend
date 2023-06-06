@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping("consents")
 public class ApiConsentController {
     private final ApiConsentService apiConsentService;
 
@@ -25,7 +25,7 @@ public class ApiConsentController {
         this.apiConsentService = apiConsentService;
     }
 
-    @GetMapping("/consents")
+    @GetMapping
     public Mono<List<ApiConsent>> getApiConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return apiConsentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
     }
