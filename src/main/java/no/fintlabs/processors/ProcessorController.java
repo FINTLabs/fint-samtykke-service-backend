@@ -16,7 +16,7 @@ public class ProcessorController {
 
     public ProcessorController(ProcessorService processorService) { this.processorService = processorService; }
 
-    @GetMapping("/processors")
+    //@GetMapping("/processors")
     public Mono<TjenesteResources> getProcessors(@AuthenticationPrincipal Jwt jwt){
         return processorService.getProcessors(FintJwtEndUserPrincipal.from(jwt));
     }

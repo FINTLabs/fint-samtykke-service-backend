@@ -18,7 +18,7 @@ public class ProcessingController {
         this.processingService = processingService;
     }
 
-    @GetMapping("/processing")
+    //@GetMapping("/processing")
     public Mono<BehandlingResources> getProcessings(@AuthenticationPrincipal Jwt jwt){
         return processingService.getProcessings(FintJwtEndUserPrincipal.from(jwt));
 

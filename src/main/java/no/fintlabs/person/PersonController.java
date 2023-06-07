@@ -23,7 +23,7 @@ public class PersonController {
         this.personService = personService;
     }
 
-    @GetMapping("/personresource")
+    //@GetMapping("/personresource")
     public PersonResource getPersonResource(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
         return personService.getPersonResource(FintJwtEndUserPrincipal.from(jwt));
     }
