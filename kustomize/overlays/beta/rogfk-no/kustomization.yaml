@@ -23,7 +23,7 @@ patches:
         path: "/spec/ingress/basePath"
         value: "/beta/rogfk-no/consents"
       - op: replace
-        path: "spec/env/0/value"
+        path: "/spec/env/0/value"
         value: "rogfk.no"
       - op: replace
         path: "/spec/env/1/value"
@@ -32,3 +32,4 @@ patches:
     target:
       kind: Application
       name: fint-samtykke-service-backend
+

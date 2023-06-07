@@ -15,10 +15,10 @@ spec:
   image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
   imagePullPolicy: Always
   env:
-    - name: fint.integration.service.authorized-org-id
-      value: fylkedotno
-    - name: fint.integration.service.authorized-role
-      value: https://role-catalog.vigoiks.no/vigo/samtykke/user
+    - name: 'fint.integration.service.authorized-org-id'
+      value: 'fylkedotno'
+    - name: 'fint.integration.service.authorized-role'
+      value: 'https://role-catalog.vigoiks.no/vigo/samtykke/user'
   envFrom:
     - secretRef:
         name: fint-samtykke-service-backend-fint-client
