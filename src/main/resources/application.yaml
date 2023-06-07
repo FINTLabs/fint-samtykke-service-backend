@@ -8,6 +8,7 @@ fint:
   integration:
     service:
       authorized-role: https://role-catalog.vigoiks.no/vigo/samtykke/user
+      authorized-org-id: vigo.no
 
 
   concent:

@@ -19,13 +19,16 @@ patches:
       - op: replace
         path: "/spec/url/basePath"
         value: "/beta/rogfk-no/consents"
-    target:
-      kind: Application
-      name: fint-samtykke-service-backend
-  - patch: |-
       - op: replace
         path: "/spec/ingress/basePath"
         value: "/beta/rogfk-no/consents"
+      - op: replace
+        path: "spec/env/0/value"
+        value: "rogfk.no"
+      - op: replace
+        path: "/spec/env/1/value"
+        value: "https://role-catalog.vigoiks.no/vigo/samtykke/user"
+
     target:
       kind: Application
       name: fint-samtykke-service-backend

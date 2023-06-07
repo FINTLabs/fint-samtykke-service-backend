@@ -16,19 +16,16 @@ import org.springframework.security.web.server.authorization.AuthorizationContex
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
 
-    @Value("${fint.integration.service.authorized-role:rolle}")
+    @Value("${fint.integration.service.authorized-role:${fint.integration.service.authorized-role:rolle}}")
     private String authorizedRole;
-    @Value("vigo.no")
+    @Value("${fint.integration.service.authorized-org-id:vigo.no}")
     private String authorizedOrgId;
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange((authorize) -> authorize
                         .pathMatchers("/**")
-                        //.permitAll()
                         .access(accessDecisionManager())
-                        //.hasAnyAuthority(authorizedOrgId)
-                        //.hasRole(authorizedRole)
                         .anyExchange()
                         .authenticated())
                 .oauth2ResourceServer((resourceServer) -> resourceServer
