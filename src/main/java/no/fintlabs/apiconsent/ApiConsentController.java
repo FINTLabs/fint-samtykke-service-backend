@@ -27,12 +27,14 @@ public class ApiConsentController {
 
     @GetMapping
     public Mono<List<ApiConsent>> getApiConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+        log.debug("Getmapping");
         return apiConsentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
     }
 
     @PostMapping("/{processingId}")
     public Mono<ApiConsent> addApiConsent(@PathVariable String processingId,
                                           @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
+        log.debug("Postmapping");
         return apiConsentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
 
     }
@@ -43,6 +45,15 @@ public class ApiConsentController {
                                              @PathVariable String processingId,
                                              @PathVariable boolean active,
                                              @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        return apiConsentService.updateConsent(consentId, processingId, active, FintJwtEndUserPrincipal.from(jwt));
+        log.debug("Putmapping");
+        try {
+            log.info("Update Consent ");
+            FintJwtEndUserPrincipal prinsipal = FintJwtEndUserPrincipal.from(jwt);
+            log.info(prinsipal.getGivenName());
+            return apiConsentService.updateConsent(consentId, processingId, active, prinsipal);
+        } catch (Exception e){
+            log.error("WHAT", e);
+            return Mono.error(e);
+        }
     }
 }

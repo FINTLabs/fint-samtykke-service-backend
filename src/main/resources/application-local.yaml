@@ -1,5 +1,5 @@
 fint:
-  org-id: fintlabs.no
+  org-id: vigo.no
   client:
     registration-id: fint
     password: ${fint.core.oauth2.password}
@@ -29,3 +29,7 @@ spring:
             client-secret: ${fint.core.oauth2.client-secret}
             provider: fint-idp
             scope: fint-client
+
+logging:
+  level:
+    no.fintlabs: debug

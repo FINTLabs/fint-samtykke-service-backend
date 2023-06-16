@@ -10,7 +10,7 @@ spec:
     enabled: true
     middlewares:
       - fint-samtykke-sso
-    basePath: '/beta/rogfk-no/consents'
+    basePath: 'path'
   orgId: rogfk.no
   image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
   imagePullPolicy: Always

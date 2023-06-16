@@ -25,6 +25,7 @@ public class SecurityConfiguration {
         http
                 .authorizeExchange((authorize) -> authorize
                         .pathMatchers("/**")
+                        //.permitAll()
                         .access(accessDecisionManager())
                         .anyExchange()
                         .authenticated())
