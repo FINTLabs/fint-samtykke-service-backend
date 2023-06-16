@@ -65,4 +65,8 @@ management:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
 
+logging:
+  level:
+    no.fintlabs: debug
+
 
