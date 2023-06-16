@@ -1,9 +1,8 @@
 name: CD
 
 on:
-  push:
-    branches:
-      - main
+  repository_dispatch:
+    types: [trigger-cd]
 
   workflow_dispatch:
 
