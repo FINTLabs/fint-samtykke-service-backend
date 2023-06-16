@@ -17,6 +17,7 @@ import java.time.Clock;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
+
 @Slf4j
 @Service
 public class ConsentService {
@@ -34,6 +35,7 @@ public class ConsentService {
     }
 
     public Mono<SamtykkeResources> getFilteredConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
+        log.info("Fetching consents for: " + principal.getSurname() + " " + principal.getGivenName());
         String oDataFilter = "links/person/any(a:a/href eq '" + personService.getPersonUri(principal) + "')";
         return fintClient.getResource(fintEndpointConfiguration.getBaseUri() +
                 fintEndpointConfiguration.getConsentUri() + "?$filter=" + oDataFilter, SamtykkeResources.class);
@@ -45,21 +47,24 @@ public class ConsentService {
         return String.valueOf(consentLinks.get("behandling").get(0));
     }
 
-    public SamtykkeResource addConsent(String processingId, FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
+    public SamtykkeResource addConsent(String processingId, FintJwtEndUserPrincipal principal, boolean isConsentGiven) throws ExecutionException, InterruptedException {
         Link processingLink = new Link(fintEndpointConfiguration.getBaseUri() + fintEndpointConfiguration.getProcessingUri()
                 + "systemid/" + processingId);
         Link personLink = new Link(personService.getPersonUri(principal));
 
         Periode consentTime = new Periode();
         {
-            consentTime.setBeskrivelse("Opprettelse av samtykke");
-            consentTime.setStart(Date.from(Clock.systemUTC().instant()));
+            if (isConsentGiven){
+                consentTime.setBeskrivelse("Samtykke gitt");
+                consentTime.setStart(Date.from(Clock.systemUTC().instant()));
+            } else {
+                consentTime.setBeskrivelse("Tom samtykke opprettet");
+            }
         }
 
         Identifikator consentSystemId = new Identifikator();
         {
-            consentSystemId.setGyldighetsperiode(consentTime);
-            consentSystemId.setIdentifikatorverdi("systemId");
+            consentSystemId.setIdentifikatorverdi(UUID.randomUUID().toString());
         }
 
         SamtykkeResource consent = new SamtykkeResource();
@@ -70,14 +75,38 @@ public class ConsentService {
             consent.addPerson(personLink);
             consent.addBehandling(processingLink);
         }
-        return consent;
 
+        return consent;
     }
 
     public SamtykkeResource saveConsentToDatabase(SamtykkeResource samtykkeResource) throws ExecutionException, InterruptedException {
 
         ResponseEntity<Void> response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
                 + fintEndpointConfiguration.getConsentUri(), samtykkeResource, SamtykkeResource.class).toFuture().get();
+        log.info("Added new consent with status : " + response.getStatusCode().name());
+        log.debug("Location uri til new consent : " + response.getHeaders().getLocation().toString());
+
+        ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
+        log.info("Created new consent with status :" + rs.getStatusCode().name());
+
+        return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+    }
+
+    public SamtykkeResource updateConsentToFINT(SamtykkeResource samtykkeResource) throws ExecutionException, InterruptedException {
+
+        Periode periode = new Periode();
+        {
+            periode.setBeskrivelse("Gir samtykke");
+            periode.setStart(Date.from(Clock.systemUTC().instant()));
+            periode.setSlutt(null);
+        }
+        samtykkeResource.setGyldighetsperiode(periode);
+
+       String consentId = samtykkeResource.getSystemId().getIdentifikatorverdi();
+
+
+        ResponseEntity<Void> response = fintClient.putResource(fintEndpointConfiguration.getBaseUri()
+                + fintEndpointConfiguration.getConsentUri()+ "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
         log.info("Added new consent with status : " + response.getStatusCode().name());
         log.debug("Location uri til new consent : " + response.getHeaders().getLocation().toString());
 

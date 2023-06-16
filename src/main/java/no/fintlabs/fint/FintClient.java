@@ -83,7 +83,7 @@ public class FintClient {
                 .filter(response -> response.getStatusCode().name().equalsIgnoreCase("CREATED"))
                 .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> true)
                     .exponentialBackoff(Duration.ofMillis(firstBackoff),Duration.ofMillis(maxBackOff))
-                    .timeout(Duration.ofSeconds(30)));
+                    .timeout(Duration.ofSeconds(60)));
     }
 
     public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {

@@ -30,8 +30,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-
-
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final:osx-aarch_64'
 
     implementation 'no.fint:fint-personvern-resource-model-java:3.10.0'
