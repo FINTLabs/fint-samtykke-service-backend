@@ -14,6 +14,13 @@ spec:
   orgId: rogfk.no
   image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
   imagePullPolicy: Always
+  resources:
+    limits:
+      memory: "1024Mi"
+      cpu: "250m"
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
   env:
     - name: 'fint.integration.service.authorized-org-id'
       value: 'fylkedotno'
