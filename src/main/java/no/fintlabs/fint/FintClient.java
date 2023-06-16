@@ -1,6 +1,7 @@
 package no.fintlabs.fint;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class FintClient {
     private final WebClient webClient;
@@ -75,15 +77,24 @@ public class FintClient {
     }
 
     public Mono<ResponseEntity<Void>> waitUntilCreated(String url, int firstBackoff , int maxBackOff){
+        int maxAttempts = 50;
 
         return webClient.head()
                 .uri(url)
                 .retrieve()
                 .toBodilessEntity()
+                .doOnEach(signal -> {
+                    if(signal.isOnNext()) {
+                        log.info("Received status: " + signal.get().getStatusCode().name());
+                    } else if(signal.isOnError()) {
+                        log.error("Error occurred: ", signal.getThrowable());
+                    }
+                })
                 .filter(response -> response.getStatusCode().name().equalsIgnoreCase("CREATED"))
-                .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> true)
-                    .exponentialBackoff(Duration.ofMillis(firstBackoff),Duration.ofMillis(maxBackOff))
-                    .timeout(Duration.ofSeconds(60)));
+                .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> repeatContext.iteration() < maxAttempts)
+                        .exponentialBackoff(Duration.ofMillis(firstBackoff),Duration.ofMillis(maxBackOff))
+                        .timeout(Duration.ofSeconds(60)))
+                .doOnSuccess(responseEntity -> log.info("Final response entity: " + responseEntity.toString()));
     }
 
     public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {
