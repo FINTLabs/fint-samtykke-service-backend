@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -73,29 +74,30 @@ public class FintClient {
                 .toBodilessEntity();
     }
 
-    public ResponseEntity<Void> waitUntilCreatedTest(String url) {
+    public ResponseEntity<Void> waitUntilCreatedTest(String url) throws ExecutionException, InterruptedException {
         int count = 0;
         ResponseEntity<Void> responseEntity;
 
         while (count++ < 60) {
             log.info("Getting Location Status");
             try {
-                 responseEntity = webClient.head()
+                responseEntity = webClient.head()
                         .uri(url)
                         .retrieve()
                         .toBodilessEntity()
-                        .block();
+                        .toFuture()
+                        .get();
             } catch (Exception exception) {
                 log.error("Error while fetching location status", exception);
                 throw exception;
             }
 
-             if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
-                 log.info("Status is Created");
-                 return responseEntity;
-             } else {
-                 log.info("Status: " + responseEntity.getStatusCode());
-             }
+            if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
+                log.info("Status is Created");
+                return responseEntity;
+            } else {
+                log.info("Status: " + responseEntity.getStatusCode());
+            }
 
             try {
                 Thread.sleep(1000);
