@@ -74,7 +74,7 @@ public class FintClient {
                 .toBodilessEntity();
     }
 
-    public ResponseEntity<Void> waitUntilCreatedTest(String url) throws ExecutionException, InterruptedException {
+    public ResponseEntity<Void> waitUntilCreated(String url) throws ExecutionException, InterruptedException {
         int count = 0;
         ResponseEntity<Void> responseEntity;
 
@@ -108,11 +108,11 @@ public class FintClient {
         throw new RuntimeException("Error while fetching location url");
     }
 
-    public Mono<ResponseEntity<Void>> waitUntilCreated(String url) {
-        return waitUntilCreated(url, 1000, 5000);
+    public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url) {
+        return waitUntilCreatedOld(url, 1000, 5000);
     }
 
-    public Mono<ResponseEntity<Void>> waitUntilCreated(String url, int firstBackoff, int maxBackOff) {
+    public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url, int firstBackoff, int maxBackOff) {
         int maxAttempts = 50;
 
         return webClient.head()

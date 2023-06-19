@@ -1,7 +1,6 @@
 package no.fintlabs.apiconsent;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.felles.kompleksedatatyper.Periode;
 import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
 import no.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.time.Clock;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;

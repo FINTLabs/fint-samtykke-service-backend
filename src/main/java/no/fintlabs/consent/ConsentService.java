@@ -88,7 +88,7 @@ public class ConsentService {
             String locationUrl = response.getHeaders().getLocation().toString();
             log.info("Added new consent with status : " + response.getStatusCode().name());
             log.debug("Location uri til new consent : " + locationUrl);
-            ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl).toFuture().get();
+            ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl);
             log.info("Created new consent with status :" + rs.getStatusCode().name());
 
             return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
@@ -116,7 +116,7 @@ public class ConsentService {
             log.info("Added new consent with status : " + response.getStatusCode().name());
             log.debug("Location uri til new consent : " + locationUrl);
 
-            ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl).toFuture().get();
+            ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl);
             log.info("Created new consent with status :" + rs.getStatusCode().name());
 
             return fintClient.getResource(locationUrl, SamtykkeResource.class).toFuture().get();
@@ -142,7 +142,7 @@ public class ConsentService {
                     .getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
 
             log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
-            ResponseEntity<Void> rs = fintClient.waitUntilCreatedTest(response.getHeaders().getLocation().toString());
+            ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString());
             log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
 
             SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
