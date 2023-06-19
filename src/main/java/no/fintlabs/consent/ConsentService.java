@@ -142,7 +142,7 @@ public class ConsentService {
                     .getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
 
             log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
-            ResponseEntity<Void> rs = fintClient.waitUntilCreatedTest(response.getHeaders().getLocation().toString()).toFuture().get();
+            ResponseEntity<Void> rs = fintClient.waitUntilCreatedTest(response.getHeaders().getLocation().toString());
             log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
 
             SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
