@@ -151,9 +151,11 @@ public class ApiConsentService {
                         SamtykkeResource newSamtykkeResource = consentService.addConsent(behandlingResource.getSystemId().getIdentifikatorverdi(), principal, false);
                         Mono<ResponseEntity<Void>> responseEntityMono = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
                                 + fintEndpointConfiguration.getConsentUri(), newSamtykkeResource, SamtykkeResource.class);
-                        fintClient.waitUntilCreated(responseEntityMono.toFuture().get().getHeaders().getLocation().toString());
+                        String locationUrl = responseEntityMono.toFuture().get().getHeaders().getLocation().toString();
+                        fintClient.waitUntilCreated(locationUrl);
                         return newSamtykkeResource;
-                    } catch (ExecutionException | InterruptedException e) {
+                    } catch (Exception e) {
+                        log.error("Unknown error", e);
                         throw new RuntimeException(e);
                     }
                 });

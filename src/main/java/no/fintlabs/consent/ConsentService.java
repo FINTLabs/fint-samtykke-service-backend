@@ -4,12 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.felles.kompleksedatatyper.Periode;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.personvern.samtykke.*;
+import no.fint.model.resource.personvern.samtykke.BehandlingResource;
+import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
+import no.fint.model.resource.personvern.samtykke.SamtykkeResources;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
+import no.fintlabs.person.PersonService;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.http.ResponseEntity;
-import no.fintlabs.person.PersonService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -54,7 +56,7 @@ public class ConsentService {
 
         Periode consentTime = new Periode();
         {
-            if (isConsentGiven){
+            if (isConsentGiven) {
                 consentTime.setBeskrivelse("Samtykke gitt");
                 consentTime.setStart(Date.from(Clock.systemUTC().instant()));
             } else {
@@ -80,20 +82,23 @@ public class ConsentService {
     }
 
     public SamtykkeResource saveConsentToDatabase(SamtykkeResource samtykkeResource) throws ExecutionException, InterruptedException {
+        try {
+            ResponseEntity<Void> response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
+                    + fintEndpointConfiguration.getConsentUri(), samtykkeResource, SamtykkeResource.class).toFuture().get();
+            String locationUrl = response.getHeaders().getLocation().toString();
+            log.info("Added new consent with status : " + response.getStatusCode().name());
+            log.debug("Location uri til new consent : " + locationUrl);
+            ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl).toFuture().get();
+            log.info("Created new consent with status :" + rs.getStatusCode().name());
 
-        ResponseEntity<Void> response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
-                + fintEndpointConfiguration.getConsentUri(), samtykkeResource, SamtykkeResource.class).toFuture().get();
-        log.info("Added new consent with status : " + response.getStatusCode().name());
-        log.debug("Location uri til new consent : " + response.getHeaders().getLocation().toString());
-
-        ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
-        log.info("Created new consent with status :" + rs.getStatusCode().name());
-
-        return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+            return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+        } catch (Exception exception) {
+            log.error("Error in saveConsentToDatabase", exception);
+            throw exception;
+        }
     }
 
     public SamtykkeResource updateConsentToFINT(SamtykkeResource samtykkeResource) throws ExecutionException, InterruptedException {
-
         Periode periode = new Periode();
         {
             periode.setBeskrivelse("Gir samtykke");
@@ -102,18 +107,23 @@ public class ConsentService {
         }
         samtykkeResource.setGyldighetsperiode(periode);
 
-       String consentId = samtykkeResource.getSystemId().getIdentifikatorverdi();
+        String consentId = samtykkeResource.getSystemId().getIdentifikatorverdi();
 
+        try {
+            ResponseEntity<Void> response = fintClient.putResource(fintEndpointConfiguration.getBaseUri()
+                    + fintEndpointConfiguration.getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
+            String locationUrl = response.getHeaders().getLocation().toString();
+            log.info("Added new consent with status : " + response.getStatusCode().name());
+            log.debug("Location uri til new consent : " + locationUrl);
 
-        ResponseEntity<Void> response = fintClient.putResource(fintEndpointConfiguration.getBaseUri()
-                + fintEndpointConfiguration.getConsentUri()+ "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
-        log.info("Added new consent with status : " + response.getStatusCode().name());
-        log.debug("Location uri til new consent : " + response.getHeaders().getLocation().toString());
+            ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl).toFuture().get();
+            log.info("Created new consent with status :" + rs.getStatusCode().name());
 
-        ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
-        log.info("Created new consent with status :" + rs.getStatusCode().name());
-
-        return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+            return fintClient.getResource(locationUrl, SamtykkeResource.class).toFuture().get();
+        } catch (Exception exception) {
+            log.error("Error in updateConsentToFint", exception);
+            throw exception;
+        }
     }
 
     public SamtykkeResource withdrawConsent(SamtykkeResource samtykkeResource, String consentId) throws ExecutionException, InterruptedException {
@@ -126,18 +136,23 @@ public class ConsentService {
         }
         samtykkeResource.setGyldighetsperiode(periode);
 
-        ResponseEntity<Void> response = fintClient.putResource(fintEndpointConfiguration
-                .getBaseUri() + fintEndpointConfiguration
-                .getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
+        try {
+            ResponseEntity<Void> response = fintClient.putResource(fintEndpointConfiguration
+                    .getBaseUri() + fintEndpointConfiguration
+                    .getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
 
-        log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
-        ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
-        log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
+            log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
+            ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
+            log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
 
+            SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
-        SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
+            return withdrawnConsent;
+        } catch (Exception exception) {
+            log.error("Error in withdrawConsent", exception);
+            throw exception;
+        }
 
-        return withdrawnConsent;
     }
 
     public Optional<SamtykkeResource> findNewestConsent(SamtykkeResources samtykkeResources, BehandlingResource behandlingResource) {

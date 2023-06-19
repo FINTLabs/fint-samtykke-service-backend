@@ -2,6 +2,7 @@ package no.fintlabs.fint;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -88,13 +89,16 @@ public class FintClient {
                         log.info("Received status: " + signal.get().getStatusCode().name());
                     } else if(signal.isOnError()) {
                         log.error("Error occurred: ", signal.getThrowable());
+                    } else {
+                        log.debug("Unknwon error");
                     }
                 })
-                .filter(response -> response.getStatusCode().name().equalsIgnoreCase("CREATED"))
+                .filter(response -> response.getStatusCode() == HttpStatus.CREATED)
                 .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> repeatContext.iteration() < maxAttempts)
                         .exponentialBackoff(Duration.ofMillis(firstBackoff),Duration.ofMillis(maxBackOff))
                         .timeout(Duration.ofSeconds(60)))
-                .doOnSuccess(responseEntity -> log.info("Final response entity: " + responseEntity.toString()));
+                .doOnSuccess(responseEntity -> log.info("Final response entity: " + responseEntity.toString()))
+                .doOnError(error -> log.error(error.getMessage(), error));
     }
 
     public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {
