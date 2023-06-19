@@ -142,7 +142,7 @@ public class ConsentService {
                     .getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
 
             log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
-            ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString()).toFuture().get();
+            ResponseEntity<Void> rs = fintClient.waitUntilCreatedTest(response.getHeaders().getLocation().toString()).toFuture().get();
             log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
 
             SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
@@ -152,7 +152,6 @@ public class ConsentService {
             log.error("Error in withdrawConsent", exception);
             throw exception;
         }
-
     }
 
     public Optional<SamtykkeResource> findNewestConsent(SamtykkeResources samtykkeResources, BehandlingResource behandlingResource) {

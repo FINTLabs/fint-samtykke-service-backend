@@ -73,6 +73,39 @@ public class FintClient {
                 .toBodilessEntity();
     }
 
+    public Mono<ResponseEntity<Void>> waitUntilCreatedTest(String url) {
+        int count = 0;
+        ResponseEntity<Void> block;
+
+        while (count++ < 60) {
+            log.info("Getting Location Status");
+            try {
+                 block = webClient.head()
+                        .uri(url)
+                        .retrieve()
+                        .toBodilessEntity()
+                        .block();
+            } catch (Exception exception) {
+                log.error("Error while fetching location status", exception);
+                throw exception;
+            }
+
+             if (block.getStatusCode() == HttpStatus.CREATED) {
+                 log.info("Status is Created");
+                 return Mono.just(block);
+             } else {
+                 log.info("Status: " + block.getStatusCode());
+             }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                log.error("Failed to sleep");
+            }
+        }
+        return Mono.error(new RuntimeException("Iterated over limit"));
+    }
+
     public Mono<ResponseEntity<Void>> waitUntilCreated(String url) {
         return waitUntilCreated(url, 1000, 5000);
     }
