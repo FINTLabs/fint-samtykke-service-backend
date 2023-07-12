@@ -26,6 +26,10 @@ spec:
       value: 'fylkedotno'
     - name: 'fint.integration.service.authorized-role'
       value: 'https://role-catalog.vigoiks.no/vigo/samtykke/user'
+    - name: 'fint.client.base-url'
+      value: 'https://beta.felleskomponent.no'
+    - name: 'fint.concents.endpoints.baseUri'
+      value: 'https://beta.felleskomponent.no'
   envFrom:
     - secretRef:
         name: fint-samtykke-service-backend-fint-client

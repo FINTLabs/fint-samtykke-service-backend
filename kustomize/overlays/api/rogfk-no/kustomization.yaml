@@ -28,6 +28,12 @@ patches:
       - op: replace
         path: "/spec/env/1/value"
         value: "https://role-catalog.vigoiks.no/vigo/samtykke/user"
+      - op: replace
+        path: "/spec/env/2/value"
+        value: "https://api.felleskomponent.no"
+      - op: replace
+        path: "/spec/env/3/value"
+        value: "https://api.felleskomponent.no"
 
     target:
       kind: Application
