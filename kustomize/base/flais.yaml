@@ -29,7 +29,7 @@ spec:
     - name: 'fint.client.base-url'
       value: 'https://beta.felleskomponent.no'
     - name: 'fint.concent.endpoints.baseUri'
-      value: 'https://beta.felleskomponent.no'
+      value: 'https://beta.felleskomponent.no/'
   envFrom:
     - secretRef:
         name: fint-samtykke-service-backend-fint-client
