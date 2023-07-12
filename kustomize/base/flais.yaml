@@ -28,7 +28,7 @@ spec:
       value: 'https://role-catalog.vigoiks.no/vigo/samtykke/user'
     - name: 'fint.client.base-url'
       value: 'https://beta.felleskomponent.no'
-    - name: 'fint.concents.endpoints.baseUri'
+    - name: 'fint.concent.endpoints.baseUri'
       value: 'https://beta.felleskomponent.no'
   envFrom:
     - secretRef:
