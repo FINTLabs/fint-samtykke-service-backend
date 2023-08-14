@@ -14,7 +14,7 @@ patches:
         value: "trondelagfylke.no"
     target:
       kind: FintClient
-      name: fint-samtykke-service-backend-fint-client
+      name: samtykke-srv-be-client
   - patch: |-
       - op: replace
         path: "/spec/url/basePath"
