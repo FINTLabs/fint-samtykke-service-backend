@@ -56,9 +56,13 @@ jobs:
       matrix:
         org:
           - rogfk-no
+          - trondelagfylke-no
         cluster:
-          - aks-beta-fint-2021-11-23
+#          - aks-beta-fint-2021-11-23
           - aks-api-fint-2022-02-08
+        include:
+          - org: rogfk-no
+            cluster: aks-beta-fint-2021-11-23
 
     steps:
       - name: Checkout repository
