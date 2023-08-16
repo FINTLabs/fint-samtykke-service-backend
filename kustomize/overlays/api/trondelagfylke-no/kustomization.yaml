@@ -34,6 +34,9 @@ patches:
       - op: replace
         path: "/spec/env/3/value"
         value: "https://api.felleskomponent.no/"
+      - op: replace
+        path: "/spec/orgId"
+        value: "trondelagfylke.no"
 
     target:
       kind: Application
