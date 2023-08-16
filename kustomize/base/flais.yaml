@@ -30,6 +30,8 @@ spec:
       value: 'https://beta.felleskomponent.no'
     - name: 'fint.concent.endpoints.baseUri'
       value: 'https://beta.felleskomponent.no/'
+    - name: 'fint.org-id'
+      value: 'fylkedotno'
   envFrom:
     - secretRef:
         name: samtykke-srv-be-client
