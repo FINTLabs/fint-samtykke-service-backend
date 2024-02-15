@@ -28,6 +28,18 @@ patches:
       - op: replace
         path: "/spec/env/1/value"
         value: "https://role-catalog.vigoiks.no/vigo/samtykke/user"
+      - op: replace
+        path: "/spec/env/2/value"
+        value: "https://beta.felleskomponent.no"
+      - op: replace
+        path: "/spec/env/3/value"
+        value: "https://beta.felleskomponent.no/"
+      - op: replace
+        path: "/spec/env/4/value"
+        value: "rogfk.no"
+      - op: replace
+        path: "/spec/orgId"
+        value: "rogfk.no"
 
     target:
       kind: Application
