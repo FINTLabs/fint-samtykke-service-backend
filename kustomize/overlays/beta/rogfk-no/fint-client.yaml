@@ -1,0 +1,12 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintClient
+metadata:
+  name: samtykke-srv-be-client
+
+spec:
+  orgId: fintlabs.no
+  components:
+    - utdanning_elev
+    - personvern_samtykke
+    - personvern_kodeverk
+    - administrasjon_personal

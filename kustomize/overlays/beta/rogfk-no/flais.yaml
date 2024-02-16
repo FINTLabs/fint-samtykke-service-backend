@@ -1,0 +1,38 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: Application
+metadata:
+  name: fint-samtykke-service-backend
+spec:
+  url:
+    hostname: 'samtykke.vigoiks.no'
+    basePath: '/beta/rogfk-no/consents'
+  ingress:
+    enabled: true
+    middlewares:
+      - fint-samtykke-auth-forward-sso
+    basePath: 'path'
+  orgId: rogfk.no
+  image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
+  imagePullPolicy: Always
+  resources:
+    limits:
+      memory: "1024Mi"
+      cpu: "250m"
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+  env:
+    - name: 'fint.integration.service.authorized-org-id'
+      value: 'fylkedotno'
+    - name: 'fint.integration.service.authorized-role'
+      value: 'https://role-catalog.vigoiks.no/vigo/samtykke/user'
+    - name: 'fint.client.base-url'
+      value: 'https://beta.felleskomponent.no'
+    - name: 'fint.concent.endpoints.baseUri'
+      value: 'https://beta.felleskomponent.no/'
+    - name: 'fint.org-id'
+      value: 'fylkedotno'
+  envFrom:
+    - secretRef:
+        name: samtykke-srv-be-client
+  
