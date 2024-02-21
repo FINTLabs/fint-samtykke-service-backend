@@ -23,7 +23,7 @@ spec:
       cpu: "100m"
   env:
     - name: 'fint.integration.service.authorized-org-id'
-      value: 'fylkedotno'
+      value: 'rogfk.no'
     - name: 'fint.integration.service.authorized-role'
       value: 'https://role-catalog.vigoiks.no/vigo/samtykke/user'
     - name: 'fint.client.base-url'
@@ -31,7 +31,7 @@ spec:
     - name: 'fint.concent.endpoints.baseUri'
       value: 'https://beta.felleskomponent.no/'
     - name: 'fint.org-id'
-      value: 'fylkedotno'
+      value: 'rogfk.no'
   envFrom:
     - secretRef:
         name: samtykke-srv-be-client

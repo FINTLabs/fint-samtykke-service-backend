@@ -4,7 +4,7 @@ metadata:
   name: samtykke-srv-be-client
 
 spec:
-  orgId: fintlabs.no
+  orgId: rogfk.no
   components:
     - utdanning_elev
     - personvern_samtykke
