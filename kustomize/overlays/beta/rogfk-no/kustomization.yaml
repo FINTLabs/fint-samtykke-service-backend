@@ -13,6 +13,7 @@ commonLabels:
   app.kubernetes.io/part-of: samtykke
   fintlabs.no/team: bas
 
+
 patches:
   - patch: |-
       - op: replace
