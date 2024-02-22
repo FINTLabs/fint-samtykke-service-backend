@@ -34,5 +34,5 @@ spec:
       value: 'fintlabs.no'
   envFrom:
     - secretRef:
-        name: samtykke-srv-be-client
+        name: fint-samtykke-service-backend-client
   

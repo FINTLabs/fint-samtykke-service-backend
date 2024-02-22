@@ -1,18 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: rogfk-no
-resources:
-  - flais.yaml
-  - fint-client.yaml
 commonLabels:
   app.kubernetes.io/instance: fint-samtykke-service-backend_rogfk_no
   fintlabs.no/org-id: rogfk.no
-  app.kubernetes.io/name: fint-samtykke-service-backend
-  app.kubernetes.io/version: latest
-  app.kubernetes.io/component: samtykke-backend
-  app.kubernetes.io/part-of: samtykke
-  fintlabs.no/team: bas
 
+resources:
+  - ../../../base
 
 patches:
   - patch: |-
@@ -21,11 +15,17 @@ patches:
         value: "rogfk.no"
     target:
       kind: FintClient
-      name: samtykke-srv-be-client
+      name: fint-samtykke-service-backend-client
   - patch: |-
+      - op: replace
+        path: "/spec/orgId"
+        value: "rogfk.no"
       - op: replace
         path: "/spec/url/basePath"
         value: "/beta/rogfk-no/consents"
+      - op: replace
+        path: "/spec/ingress/middlewares/0"
+        value: "fint-samtykke-auth-forward-sso"
       - op: replace
         path: "/spec/ingress/basePath"
         value: "/beta/rogfk-no/consents"
@@ -43,9 +43,6 @@ patches:
         value: "https://beta.felleskomponent.no/"
       - op: replace
         path: "/spec/env/4/value"
-        value: "rogfk.no"
-      - op: replace
-        path: "/spec/orgId"
         value: "rogfk.no"
 
     target:

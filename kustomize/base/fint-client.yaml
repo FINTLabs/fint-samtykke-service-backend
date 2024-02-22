@@ -1,8 +1,7 @@
 apiVersion: fintlabs.no/v1alpha1
 kind: FintClient
 metadata:
-  name: samtykke-srv-be-client
-
+  name:  fint-samtykke-service-backend-client
 spec:
   orgId: fintlabs.no
   components:
