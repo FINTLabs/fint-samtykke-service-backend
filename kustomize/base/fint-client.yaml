@@ -2,6 +2,9 @@ apiVersion: fintlabs.no/v1alpha1
 kind: FintClient
 metadata:
   name:  fint-samtykke-service-backend-client
+  labels:
+    app.kubernetes.io/name: fint-samtykke-service-backend-client
+    app.kubernetes.io/instance: fint-samtykke-service-backend-client_fintlabs_no
 spec:
   orgId: fintlabs.no
   components:
