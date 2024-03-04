@@ -40,7 +40,12 @@ patches:
       - op: replace
         path: "/spec/orgId"
         value: "rogfk.no"
-
+      - op: replace
+        path: "/metadata/labels/app.kubernetes.io~1instance"
+        value: "fint-samtykke-service-backend_rogfk_no"
+      - op: replace
+        path: "/spec/ingress/middlewares/0"
+        value: "fint-samtykke-auth-forward-sso"
     target:
       kind: Application
       name: fint-samtykke-service-backend
