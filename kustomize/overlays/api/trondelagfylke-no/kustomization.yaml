@@ -43,6 +43,9 @@ patches:
       - op: replace
         path: "/spec/orgId"
         value: "trondelagfylke.no"
+      - op: replace
+        path: "/metadata/labels/app.kubernetes.io~1instance"
+        value: "fint-samtykke-service-backend_trondelagfylke_no"
 
     target:
       kind: Application
