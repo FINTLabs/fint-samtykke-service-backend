@@ -61,6 +61,7 @@ public class ConsentService {
                 consentTime.setStart(Date.from(Clock.systemUTC().instant()));
             } else {
                 consentTime.setBeskrivelse("Tom samtykke opprettet");
+                consentTime.setStart(new Date());
             }
         }
 
@@ -75,6 +76,9 @@ public class ConsentService {
             consent.setOpprettet(consentTime.getStart());
             consent.setSystemId(consentSystemId);
             consent.addPerson(personLink);
+            if (personLink == null) {
+                consent.addPerson(Link.with("temporary"));
+            }
             consent.addBehandling(processingLink);
         }
 
