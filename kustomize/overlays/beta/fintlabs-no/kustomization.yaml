@@ -1,0 +1,56 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: fintlabs-no
+commonLabels:
+  fintlabs.no/org-id: fintlabs.no
+
+resources:
+  - ../../../base
+
+patches:
+  - patch: |-
+      - op: replace
+        path: "/spec/orgId"
+        value: "fintlabs.no"
+      - op: replace
+        path: "/metadata/labels/app.kubernetes.io~1instance"
+        value: "fint-samtykke-service-backend-client_fintlabs_no"
+    target:
+      kind: FintClient
+      name: fint-samtykke-service-backend-client
+  - patch: |-
+      - op: replace
+        path: "/spec/orgId"
+        value: "fintlabs.no"
+      - op: replace
+        path: "/metadata/labels/app.kubernetes.io~1instance"
+        value: "fint-samtykke-service-backend_fintlabs_no"
+      - op: replace
+        path: "/spec/url/basePath"
+        value: "/beta/fintlabs-no/consents"
+      - op: replace
+        path: "/spec/ingress/middlewares/0"
+        value: "fint-samtykke-auth-forward-sso"
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/beta/fintlabs-no/consents"
+      - op: replace
+        path: "/spec/env/0/value"
+        value: "fintlabs.no"
+      - op: replace
+        path: "/spec/env/1/value"
+        value: "https://role-catalog.vigoiks.no/vigo/samtykke/user"
+      - op: replace
+        path: "/spec/env/2/value"
+        value: "https://beta.felleskomponent.no"
+      - op: replace
+        path: "/spec/env/3/value"
+        value: "https://beta.felleskomponent.no/"
+      - op: replace
+        path: "/spec/env/4/value"
+        value: "fintlabs.no"
+
+    target:
+      kind: Application
+      name: fint-samtykke-service-backend
+

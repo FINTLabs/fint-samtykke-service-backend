@@ -2,7 +2,7 @@ name: CD
 
 on:
   repository_dispatch:
-    types: [trigger-cd]
+    types: [ trigger-cd ]
 
   workflow_dispatch:
 
@@ -61,7 +61,7 @@ jobs:
           - aks-beta-fint-2021-11-23
           - aks-api-fint-2022-02-08
         include:
-          - org: rogfk-no
+          - org: fintlabs-no
             cluster: aks-beta-fint-2021-11-23
 
     steps:
