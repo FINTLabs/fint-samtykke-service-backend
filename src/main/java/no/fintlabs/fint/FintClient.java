@@ -105,7 +105,7 @@ public class FintClient {
                 log.error("Failed to sleep");
             }
         }
-        throw new RuntimeException("Error while fetching location url");
+        throw new RuntimeException("Error while fetching location url: %s".formatted(url));
     }
 
     public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url) {
