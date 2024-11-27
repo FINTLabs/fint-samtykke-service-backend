@@ -27,14 +27,14 @@ public class ApiConsentController {
 
     @GetMapping
     public Mono<List<ApiConsent>> getApiConsents(@AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        log.debug("Getmapping");
+        log.debug("Getting list of processings");
         return apiConsentService.getApiConsents(FintJwtEndUserPrincipal.from(jwt));
     }
 
     @PostMapping("/{processingId}")
     public Mono<ApiConsent> addApiConsent(@PathVariable String processingId,
                                           @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        log.debug("Postmapping");
+        log.debug("Add new consent to processing {}", processingId);
         return apiConsentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
 
     }
@@ -45,14 +45,14 @@ public class ApiConsentController {
                                              @PathVariable String processingId,
                                              @PathVariable boolean active,
                                              @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        log.debug("Putmapping");
+        log.debug("Update consent to processing {}", consentId);
         try {
-            log.info("Update Consent ");
+            log.info("Trying to update consent ");
             FintJwtEndUserPrincipal prinsipal = FintJwtEndUserPrincipal.from(jwt);
-            log.info(prinsipal.getGivenName());
+            log.info("Updated consent {} for {}", consentId,prinsipal.getGivenName());
             return apiConsentService.updateConsent(consentId, processingId, active, prinsipal);
         } catch (Exception e){
-            log.error("WHAT", e);
+            log.error("Something went wrong during update of consent", e);
             return Mono.error(e);
         }
     }
