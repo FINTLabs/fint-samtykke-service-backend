@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.retry.Repeat;
@@ -84,6 +85,7 @@ public class FintClient {
                 responseEntity = webClient.head()
                         .uri(url)
                         .retrieve()
+                        .onStatus(HttpStatus::is4xxClientError, this::handleNotFound)
                         .toBodilessEntity()
                         .toFuture()
                         .get();
@@ -96,7 +98,7 @@ public class FintClient {
                 log.info("Status is Created");
                 return responseEntity;
             } else {
-                log.info("Status: " + responseEntity.getStatusCode());
+                log.info("Status: {}", responseEntity.getStatusCode());
             }
 
             try {
@@ -108,33 +110,37 @@ public class FintClient {
         throw new RuntimeException("Error while fetching location url: %s".formatted(url));
     }
 
-    public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url) {
-        return waitUntilCreatedOld(url, 1000, 5000);
+    private Mono<? extends Throwable> handleNotFound(ClientResponse clientResponse) {
+        return Mono.just(new ExpectedFINTExeption("Request not found"));
     }
 
-    public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url, int firstBackoff, int maxBackOff) {
-        int maxAttempts = 50;
-
-        return webClient.head()
-                .uri(url)
-                .retrieve()
-                .toBodilessEntity()
-                .doOnEach(signal -> {
-                    if (signal.isOnNext()) {
-                        log.info("Received status: " + signal.get().getStatusCode().name());
-                    } else if (signal.isOnError()) {
-                        log.error("Error occurred: ", signal.getThrowable());
-                    } else {
-                        log.debug("Signal: " + signal);
-                    }
-                })
-                .filter(response -> response.getStatusCode() == HttpStatus.CREATED)
-                .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> repeatContext.iteration() < maxAttempts)
-                        .exponentialBackoff(Duration.ofMillis(firstBackoff), Duration.ofMillis(maxBackOff))
-                        .timeout(Duration.ofSeconds(60)))
-                .doOnSuccess(responseEntity -> log.info("Final response entity: " + responseEntity.toString()))
-                .doOnError(error -> log.error(error.getMessage(), error));
-    }
+//    public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url) {
+//        return waitUntilCreatedOld(url, 1000, 5000);
+//    }
+//
+//    public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url, int firstBackoff, int maxBackOff) {
+//        int maxAttempts = 50;
+//
+//        return webClient.head()
+//                .uri(url)
+//                .retrieve()
+//                .toBodilessEntity()
+//                .doOnEach(signal -> {
+//                    if (signal.isOnNext()) {
+//                        log.info("Received status: " + signal.get().getStatusCode().name());
+//                    } else if (signal.isOnError()) {
+//                        log.error("Error occurred: ", signal.getThrowable());
+//                    } else {
+//                        log.debug("Signal: " + signal);
+//                    }
+//                })
+//                .filter(response -> response.getStatusCode() == HttpStatus.CREATED)
+//                .repeatWhenEmpty(Repeat.onlyIf(repeatContext -> repeatContext.iteration() < maxAttempts)
+//                        .exponentialBackoff(Duration.ofMillis(firstBackoff), Duration.ofMillis(maxBackOff))
+//                        .timeout(Duration.ofSeconds(60)))
+//                .doOnSuccess(responseEntity -> log.info("Final response entity: " + responseEntity.toString()))
+//                .doOnError(error -> log.error(error.getMessage(), error));
+//    }
 
     public <K, T> Mono<ResponseEntity<Void>> putResource(String url, T request, Class<K> clazz) {
 
