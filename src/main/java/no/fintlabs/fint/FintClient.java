@@ -75,33 +75,28 @@ public class FintClient {
                 .toBodilessEntity();
     }
 
-    public ResponseEntity<Void> waitUntilCreated(String url) throws ExecutionException, InterruptedException {
+    public ResponseEntity<Void> waitUntilCreated(String url) {
         int count = 0;
-        ResponseEntity<Void> responseEntity;
 
         while (count++ < 60) {
             log.info("Getting Location Status");
-            try {
-                responseEntity = webClient.head()
-                        .uri(url)
-                        .retrieve()
-                        .onStatus(HttpStatus::is4xxClientError, this::handleNotFound)
-                        .toBodilessEntity()
-                        .toFuture()
-                        .get();
-            } catch (Exception exception) {
-                log.error("Error while fetching location status", exception);
-                throw exception;
-            }
+            HttpStatus status = webClient.get()
+                    .uri(url)
+                    .exchangeToMono(response -> Mono.just(response.statusCode()))
+                    .block();
 
-            if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
-                log.info("Status is Created");
-                return responseEntity;
+            if (status == HttpStatus.CREATED) {
+                log.info("Status CREATED");
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            } else if (status == HttpStatus.ACCEPTED) {
+                log.info("status is ACCEPTED");
+            } else if (status == HttpStatus.NOT_FOUND) {
+                log.info("status is NOT_FOUND");
             } else {
-                log.info("Status: {}", responseEntity.getStatusCode());
+                log.info("status is unknown {}", status);
             }
 
-            try {
+            try{
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 log.error("Failed to sleep");
@@ -110,9 +105,6 @@ public class FintClient {
         throw new RuntimeException("Error while fetching location url: %s".formatted(url));
     }
 
-    private Mono<? extends Throwable> handleNotFound(ClientResponse clientResponse) {
-        return Mono.just(new ExpectedFINTExeption("Request not found"));
-    }
 
 //    public Mono<ResponseEntity<Void>> waitUntilCreatedOld(String url) {
 //        return waitUntilCreatedOld(url, 1000, 5000);
