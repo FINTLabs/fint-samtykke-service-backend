@@ -75,7 +75,7 @@ public class FintClient {
                 .toBodilessEntity();
     }
 
-    public ResponseEntity<Void> waitUntilCreated(String url) {
+    public ResponseEntity<Void> waitUntilCreated(String url) throws ExecutionException, InterruptedException {
         int count = 0;
 
         while (count++ < 60) {
@@ -83,7 +83,7 @@ public class FintClient {
             HttpStatus status = webClient.get()
                     .uri(url)
                     .exchangeToMono(response -> Mono.just(response.statusCode()))
-                    .block();
+                    .toFuture().get();
 
             if (status == HttpStatus.CREATED) {
                 log.info("Status CREATED");
