@@ -3,6 +3,7 @@ package no.fintlabs.fint;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -80,20 +81,19 @@ public class FintClient {
 
         while (count++ < 60) {
             log.info("Getting Location Status");
-            HttpStatus status = webClient.get()
+            HttpStatusCode status = webClient.get()
                     .uri(url)
                     .exchangeToMono(response -> Mono.just(response.statusCode()))
                     .toFuture().get();
 
-            if (status == HttpStatus.CREATED) {
-                log.info("Status CREATED");
-                return new ResponseEntity<>(HttpStatus.CREATED);
-            } else if (status == HttpStatus.ACCEPTED) {
-                log.info("status is ACCEPTED");
-            } else if (status == HttpStatus.NOT_FOUND) {
-                log.info("status is NOT_FOUND");
-            } else {
-                log.info("status is unknown {}", status);
+            switch (status) {
+                case HttpStatus.CREATED -> {
+                    log.info("Status CREATED");
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+                case HttpStatus.ACCEPTED -> log.info("status is ACCEPTED");
+                case HttpStatus.NOT_FOUND -> log.info("status is NOT_FOUND");
+                case null, default -> log.info("status is unknown {}", status);
             }
 
             try{

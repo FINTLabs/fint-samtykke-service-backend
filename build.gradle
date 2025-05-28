@@ -1,12 +1,14 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.10'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
     id 'groovy'
 }
-
 group = 'no.fintlabs'
-sourceCompatibility = '17'
+version = '0.0.1-SNAPSHOT'
+java {
+    sourceCompatibility = '21'
+}
 
 configurations {
     compileOnly {
@@ -17,11 +19,16 @@ configurations {
 jar {
     enabled = false
 }
+
 repositories {
     mavenCentral()
-    maven { url "https://repo.fintlabs.no/releases" }
+    repositories {
+        maven {
+            url "https://repo.fintlabs.no/releases"
+        }
+    }
+    mavenLocal()
 }
-
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -38,14 +45,14 @@ dependencies {
     implementation 'no.fintlabs:fint-resource-server-security:1.1.0'
     implementation 'io.projectreactor:reactor-core'
 
-    compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation 'io.projectreactor.addons:reactor-extra:3.4.8'
 
-    testImplementation 'no.fint:fint-test-utils:0.0.6'
+//    testImplementation 'no.fint:fint-test-utils:0.0.6'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'cglib:cglib-nodep:3.3.0'
