@@ -2,7 +2,6 @@ plugins {
     id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
-    id 'groovy'
 }
 group = 'no.fintlabs'
 version = '0.0.1-SNAPSHOT'
@@ -56,8 +55,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'cglib:cglib-nodep:3.3.0'
-    testImplementation 'org.spockframework:spock-spring:2.0-groovy-3.0'
-    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    //testImplementation 'org.spockframework:spock-spring:2.0-groovy-3.0'
+    //testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
 
     implementation 'no.fint:fint-felles-resource-model-java:3.10.0'
     implementation 'no.fint:fint-administrasjon-resource-model-java:3.10.0'
