@@ -6,9 +6,9 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
 import no.fint.model.resource.personvern.samtykke.SamtykkeResources;
-import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.fintlabs.person.PersonService;
+import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,17 +18,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 class ConsentServiceTest {
-
-    @Mock
-    private FintClient fintClient;
 
     @Mock
     private FintEndpointConfiguration fintEndpointConfiguration;
@@ -40,8 +36,8 @@ class ConsentServiceTest {
     private ConsentService consentService;
 
     private SamtykkeResources samtykkeResources;
-    private SamtykkeResource samtykkeResource;
     private BehandlingResource behandlingResource;
+    private FintJwtEndUserPrincipal principal;
 
     @BeforeEach
     void setUp() {
@@ -79,7 +75,7 @@ class ConsentServiceTest {
     }
 
     @Test
-    void findNewestConsent() {
+    void findNewestConsentTest() {
 
         Optional<SamtykkeResource> newestConsent = consentService.findNewestConsent(samtykkeResources, behandlingResource);
 
@@ -87,4 +83,34 @@ class ConsentServiceTest {
 
     }
 
+    @Test
+    void addNewEmptyConsentTest() throws ExecutionException, InterruptedException {
+
+        principal = new FintJwtEndUserPrincipal();
+        principal.setEmployeeId("empId1");
+
+        given(fintEndpointConfiguration.getBaseUri()).willReturn("http://baseuri");
+        given(fintEndpointConfiguration.getProcessingUri()).willReturn("/processinguri");
+        given(personService.getPersonUri(principal)).willReturn("personLink");
+
+        SamtykkeResource emptyConcent = consentService.addConsent("001", principal, false);
+        String concentDescription = emptyConcent.getGyldighetsperiode().getBeskrivelse();
+
+        assertThat(concentDescription).isEqualTo("Tom samtykke opprettet");
+    }
+
+    @Test
+    void addConcentSamtykkeGivenTest() throws ExecutionException, InterruptedException {
+        principal = new FintJwtEndUserPrincipal();
+        principal.setEmployeeId("empId1");
+
+        given(fintEndpointConfiguration.getBaseUri()).willReturn("http://baseuri");
+        given(fintEndpointConfiguration.getProcessingUri()).willReturn("/processinguri");
+        given(personService.getPersonUri(principal)).willReturn("personLink");
+
+        SamtykkeResource newConcentSamtykkeGiven = consentService.addConsent("001", principal, true);
+        String concentDescription = newConcentSamtykkeGiven.getGyldighetsperiode().getBeskrivelse();
+
+        assertThat(concentDescription).isEqualTo("Samtykke gitt");
+    }
 }
