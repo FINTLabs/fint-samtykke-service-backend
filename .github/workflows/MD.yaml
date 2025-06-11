@@ -19,6 +19,7 @@ on:
         options:
           - fintlabs-no
           - rogfk-no
+          - agderfk-no
 
 env:
   REGISTRY: ghcr.io
