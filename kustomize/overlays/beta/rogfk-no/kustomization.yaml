@@ -30,7 +30,7 @@ patches:
         value: "/beta/rogfk-no/consents"
       - op: replace
         path: "/spec/ingress/middlewares/0"
-        value: "fint-samtykke-auth-forward-sso"
+        value: "fint-samtykke-sso"
       - op: replace
         path: "/spec/ingress/basePath"
         value: "/beta/rogfk-no/consents"

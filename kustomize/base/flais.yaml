@@ -12,7 +12,7 @@ spec:
   ingress:
     enabled: true
     middlewares:
-      - fint-samtykke-auth-forward-sso
+      - fint-samtykke-sso
     basePath: 'path'
   orgId: rogfk.no
   image: ghcr.io/fintlabs/fint-samtykke-service-backend:latest
