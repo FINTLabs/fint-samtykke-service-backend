@@ -17,7 +17,6 @@ on:
         default: 'warning'
         type: choice
         options:
-          - fintlabs-no
           - rogfk-no
           - agderfk-no
 

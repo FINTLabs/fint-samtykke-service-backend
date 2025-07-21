@@ -45,7 +45,7 @@ patches:
         value: "fint-samtykke-service-backend_agderfk_no"
       - op: replace
         path: "/spec/ingress/middlewares/0"
-        value: "fint-samtykke-auth-forward-sso"
+        value: "fint-samtykke-sso"
     target:
       kind: Application
       name: fint-samtykke-service-backend
