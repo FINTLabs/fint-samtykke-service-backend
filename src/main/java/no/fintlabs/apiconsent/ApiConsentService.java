@@ -42,7 +42,7 @@ public class ApiConsentService {
     public Mono<List<ApiConsent>> getApiConsents(FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
 
         SamtykkeResources samtykkeResources = Objects.requireNonNull(consentService.getFilteredConsents(principal).toFuture().get());
-        log.debug("SamtykkeResources lenght: " + samtykkeResources.getContent().size());
+        log.info("SamtykkeResources lenght: " + samtykkeResources.getContent().size());
 
         List<ApiConsent> apiConsents = Objects.requireNonNull(processingService.getProcessings(principal)
                 .toFuture().get().getContent())
@@ -62,7 +62,7 @@ public class ApiConsentService {
     public Mono<ApiConsent> addConsent(String processingId,
                                        FintJwtEndUserPrincipal principal) throws ExecutionException, InterruptedException {
         SamtykkeResource createdConsent = consentService.saveConsentToDatabase(consentService.addConsent(processingId, principal, true)) ;
-        log.debug("Added concent to database");
+        log.info("Added concent to database");
         return Mono.just(buildApiConsent(createdConsent, true));
     }
 
