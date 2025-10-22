@@ -20,6 +20,9 @@ patches:
         path: "/spec/url/basePath"
         value: "/rogfk-no/consents"
       - op: replace
+        path: "/spec/url/hostname"
+        value: "samtykke.novari.no"
+      - op: replace
         path: "/spec/ingress/basePath"
         value: "/rogfk-no/consents"
       - op: replace
