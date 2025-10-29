@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
-@RequestMapping("/consents")
+@RequestMapping
 public class ApiConsentController {
     private final ApiConsentService apiConsentService;
 
@@ -34,7 +34,7 @@ public class ApiConsentController {
     @PostMapping("/{processingId}")
     public Mono<ApiConsent> addApiConsent(@PathVariable String processingId,
                                           @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        log.debug("Add new consent to processing {}", processingId);
+        log.info("Add new consent to processing {}", processingId);
         return apiConsentService.addConsent(processingId, FintJwtEndUserPrincipal.from(jwt));
 
     }
@@ -45,11 +45,11 @@ public class ApiConsentController {
                                              @PathVariable String processingId,
                                              @PathVariable boolean active,
                                              @AuthenticationPrincipal Jwt jwt) throws ExecutionException, InterruptedException {
-        log.debug("Update consent to processing {}", consentId);
+        log.info("Update consent to processing {}", consentId);
         try {
-            log.info("Trying to update consent ");
+            log.debug("Trying to update consent ");
             FintJwtEndUserPrincipal prinsipal = FintJwtEndUserPrincipal.from(jwt);
-            log.info("Updated consent {} for {}", consentId,prinsipal.getGivenName());
+            log.debug("Updated consent {} for {}", consentId,prinsipal.getGivenName());
             return apiConsentService.updateConsent(consentId, processingId, active, prinsipal);
         } catch (Exception e){
             log.error("Something went wrong during update of consent", e);

@@ -24,14 +24,19 @@ public class SecurityConfiguration {
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange((authorize) -> authorize
-                        .pathMatchers("/**")
-                        //.permitAll()
-                        .access(accessDecisionManager())
+                        .pathMatchers(
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**"
+                        ).permitAll()
+                        .pathMatchers("/**").access(accessDecisionManager())
                         .anyExchange()
                         .authenticated())
-                .oauth2ResourceServer((resourceServer) -> resourceServer
-                        .jwt()
-                        .jwtAuthenticationConverter(new FintJwtUserConverter()));
+                .oauth2ResourceServer(oAuth2ResourceServerSpec ->
+                        oAuth2ResourceServerSpec.jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(new FintJwtUserConverter())));
+//                .oauth2ResourceServer((resourceServer) -> resourceServer
+//                        .jwt().jwtAuthenticationConverter(new FintJwtUserConverter()));
         return http.build();
     }
 
@@ -53,4 +58,6 @@ public class SecurityConfiguration {
                     return decision;
                 });
     }
+
+
 }
