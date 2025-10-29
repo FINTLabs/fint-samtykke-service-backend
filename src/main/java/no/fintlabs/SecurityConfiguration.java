@@ -24,12 +24,12 @@ public class SecurityConfiguration {
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange((authorize) -> authorize
-                        .pathMatchers(
-                                "/v3/api-docs/**",
-                                "/v3/api-docs.yaml",
-                                "/swagger-ui.html",
-                                "/swagger-ui/**"
-                        ).permitAll()
+//                        .pathMatchers(
+//                                "/v3/api-docs/**",
+//                                "/v3/api-docs.yaml",
+//                                "/swagger-ui.html",
+//                                "/swagger-ui/**"
+//                        ).permitAll()
                         .pathMatchers("/**").access(accessDecisionManager())
                         .anyExchange()
                         .authenticated())
