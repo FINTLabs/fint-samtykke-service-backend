@@ -90,8 +90,8 @@ public class FintClient {
                 return new ResponseEntity<>(HttpStatus.CREATED);
             } else if (status == HttpStatus.ACCEPTED) {
                 log.info("status is ACCEPTED");
-            } else if (status == HttpStatus.NOT_FOUND) {
-                log.info("status is NOT_FOUND");
+            } else if (status == HttpStatus.NOT_FOUND || status == HttpStatus.GONE) {
+                log.info("status is GONE");
             } else {
                 log.info("status is unknown {}", status);
             }
