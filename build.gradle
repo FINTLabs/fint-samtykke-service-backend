@@ -32,9 +32,9 @@ dependencies {
 
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final:osx-aarch_64'
 
-    implementation 'no.fint:fint-personvern-resource-model-java:3.10.0'
-    implementation 'no.fint:fint-administrasjon-resource-model-java:3.10.0'
-    implementation 'no.fint:fint-utdanning-resource-model-java:3.10.0-rc-1'
+    implementation "no.fint:fint-personvern-resource-model-java:${apiVersion}"
+    implementation "no.fint:fint-administrasjon-resource-model-java:${apiVersion}"
+    implementation "no.fint:fint-utdanning-resource-model-java:${apiVersion}"
     implementation 'no.fintlabs:fint-resource-server-security:1.1.0'
     implementation 'io.projectreactor:reactor-core'
 
@@ -52,8 +52,8 @@ dependencies {
     testImplementation 'org.spockframework:spock-spring:2.0-groovy-3.0'
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
 
-    implementation 'no.fint:fint-felles-resource-model-java:3.10.0'
-    implementation 'no.fint:fint-administrasjon-resource-model-java:3.10.0'
+    implementation "no.fint:fint-felles-resource-model-java:${apiVersion}"
+    implementation "no.fint:fint-administrasjon-resource-model-java:${apiVersion}"
     implementation 'no.fint:fint-model-resource:0.4.1'
 }
 
