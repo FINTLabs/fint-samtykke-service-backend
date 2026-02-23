@@ -40,9 +40,10 @@ fint:
 spring:
   security:
     oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: https://idp.felleskomponent.no/nidp/oauth/nam
+      resourceserver:
+       jwt:
+         issuer-uri: https://keycloak.prod.infra.flais.no/realms/fint
+         jwk-set-uri: https://keycloak.prod.infra.flais.no/realms/fint/protocol/openid-connect/certs
       client:
         provider:
           fint-idp:
