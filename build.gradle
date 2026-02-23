@@ -6,11 +6,17 @@ plugins {
 }
 
 group = 'no.fintlabs'
-sourceCompatibility = '17'
+//sourceCompatibility = '17'
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 

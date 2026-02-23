@@ -1,6 +1,7 @@
 package no.fintlabs;
 
 
+import lombok.extern.slf4j.Slf4j;
 import no.vigoiks.resourceserver.security.FintJwtUserConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 
 
+@Slf4j
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
 
@@ -50,6 +52,8 @@ public class SecurityConfiguration {
                             decision = new AuthorizationDecision(true);
                         }
                     }
+                    log.info("Decicion: {}", decision.isGranted());
+
                     return decision;
                 });
     }
