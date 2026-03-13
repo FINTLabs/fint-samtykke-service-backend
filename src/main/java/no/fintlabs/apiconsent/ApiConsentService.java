@@ -1,12 +1,12 @@
 package no.fintlabs.apiconsent;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
-import no.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
-import no.fint.model.resource.personvern.samtykke.BehandlingResource;
-import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
-import no.fint.model.resource.personvern.samtykke.SamtykkeResources;
-import no.fint.model.resource.personvern.samtykke.TjenesteResource;
+import no.novari.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
+import no.novari.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
+import no.novari.fint.model.resource.personvern.samtykke.BehandlingResource;
+import no.novari.fint.model.resource.personvern.samtykke.SamtykkeResource;
+import no.novari.fint.model.resource.personvern.samtykke.SamtykkeResources;
+import no.novari.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.consent.ConsentService;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;

@@ -2,7 +2,7 @@ package no.fintlabs.fint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
-import no.fint.model.resource.AbstractCollectionResources;
+import no.novari.fint.model.resource.AbstractCollectionResources;
 
 import java.util.List;
 

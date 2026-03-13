@@ -1,9 +1,9 @@
 package no.fintlabs.person;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.administrasjon.personal.PersonalressursResource;
-import no.fint.model.resource.felles.PersonResource;
-import no.fint.model.resource.utdanning.elev.ElevResource;
+import no.novari.fint.model.resource.administrasjon.personal.PersonalressursResource;
+import no.novari.fint.model.resource.felles.PersonResource;
+import no.novari.fint.model.resource.utdanning.elev.ElevResource;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;

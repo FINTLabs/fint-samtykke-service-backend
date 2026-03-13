@@ -1,12 +1,12 @@
 package no.fintlabs.consent;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
-import no.fint.model.felles.kompleksedatatyper.Periode;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.personvern.samtykke.BehandlingResource;
-import no.fint.model.resource.personvern.samtykke.SamtykkeResource;
-import no.fint.model.resource.personvern.samtykke.SamtykkeResources;
+import no.novari.fint.model.felles.kompleksedatatyper.Identifikator;
+import no.novari.fint.model.felles.kompleksedatatyper.Periode;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.personvern.samtykke.BehandlingResource;
+import no.novari.fint.model.resource.personvern.samtykke.SamtykkeResource;
+import no.novari.fint.model.resource.personvern.samtykke.SamtykkeResources;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.fintlabs.person.PersonService;
