@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.fint.model.felles.kompleksedatatyper.Periode;
-import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
-import no.fint.model.resource.personvern.samtykke.BehandlingResource;
+import no.novari.fint.model.felles.kompleksedatatyper.Periode;
+import no.novari.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
+import no.novari.fint.model.resource.personvern.samtykke.BehandlingResource;
 
 @Data
 @NoArgsConstructor

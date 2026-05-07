@@ -1,6 +1,6 @@
 package no.fintlabs.processing;
 
-import no.fint.model.resource.personvern.samtykke.BehandlingResources;
+import no.novari.fint.model.resource.personvern.samtykke.BehandlingResources;
 import no.fintlabs.fint.FintClient;
 import no.fintlabs.fint.FintEndpointConfiguration;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;

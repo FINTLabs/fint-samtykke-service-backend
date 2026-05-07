@@ -1,6 +1,6 @@
 package no.fintlabs.processors;
 
-import no.fint.model.resource.personvern.samtykke.TjenesteResources;
+import no.novari.fint.model.resource.personvern.samtykke.TjenesteResources;
 import no.vigoiks.resourceserver.security.FintJwtEndUserPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
