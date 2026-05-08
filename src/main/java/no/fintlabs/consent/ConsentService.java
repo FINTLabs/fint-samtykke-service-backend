@@ -86,10 +86,10 @@ public class ConsentService {
             ResponseEntity<Void> response = fintClient.postResource(fintEndpointConfiguration.getBaseUri()
                     + fintEndpointConfiguration.getConsentUri(), samtykkeResource, SamtykkeResource.class).toFuture().get();
             String locationUrl = response.getHeaders().getLocation().toString();
-            log.info("Added new consent with status : " + response.getStatusCode().name());
+            log.info("Added new consent with status : " + response.getStatusCode().toString());
             log.debug("Location uri til new consent : " + locationUrl);
             ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl);
-            log.info("Created new consent with status :" + rs.getStatusCode().name());
+            log.info("Created new consent with status :" + rs.getStatusCode().toString());
 
             return fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
         } catch (Exception exception) {
@@ -113,11 +113,11 @@ public class ConsentService {
             ResponseEntity<Void> response = fintClient.putResource(fintEndpointConfiguration.getBaseUri()
                     + fintEndpointConfiguration.getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
             String locationUrl = response.getHeaders().getLocation().toString();
-            log.info("Added new consent with status : " + response.getStatusCode().name());
+            log.info("Added new consent with status : " + response.getStatusCode().toString());
             log.debug("Location uri til new consent : " + locationUrl);
 
             ResponseEntity<Void> rs = fintClient.waitUntilCreated(locationUrl);
-            log.info("Created new consent with status :" + rs.getStatusCode().name());
+            log.info("Created new consent with status :" + rs.getStatusCode().toString());
 
             return fintClient.getResource(locationUrl, SamtykkeResource.class).toFuture().get();
         } catch (Exception exception) {
@@ -141,9 +141,9 @@ public class ConsentService {
                     .getBaseUri() + fintEndpointConfiguration
                     .getConsentUri() + "systemid/" + consentId, samtykkeResource, SamtykkeResource.class).toFuture().get();
 
-            log.info("update consent : withdrawn sent : " + response.getStatusCode().name());
+            log.info("update consent : withdrawn sent : " + response.getStatusCode().toString());
             ResponseEntity<Void> rs = fintClient.waitUntilCreated(response.getHeaders().getLocation().toString());
-            log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().name());
+            log.info("updated consent : withdrawn confirmed : " + rs.getStatusCode().toString());
 
             SamtykkeResource withdrawnConsent = fintClient.getResource(response.getHeaders().getLocation().toString(), SamtykkeResource.class).toFuture().get();
 
